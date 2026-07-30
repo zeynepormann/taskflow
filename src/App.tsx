@@ -16,6 +16,7 @@ import Users from "./pages/Users";
 import Projects from "./pages/Projects";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Feed from "./pages/Feed";
+import EditTodo from "./pages/EditTodo";
 
 function App() {
     return (
@@ -37,6 +38,10 @@ function App() {
                  <Route
                     path="/tasks"
                     element={<Tasks />}
+                />
+                <Route
+                    path="/tasks/:id/edit"
+                    element= {<EditTodo />}
                 />
 
                 <Route
