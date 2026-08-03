@@ -7,12 +7,21 @@ import {
 } from "react";
 import { getTodos } from "../services/todoService";
 import type { TodoWithDate } from "../types/todo";
+import { updateTodoRequest, deleteTodoRequest } from "../services/todoService";
+import type { EditTodoFormValues } from "../schema/editTodoSchema";
+
 
 interface TodoContextValue {
-    todos: TodoWithDate[];
-    isLoading: boolean;
-    isError: string;
-    fetchTodos: () => Promise<void>
+  todos: TodoWithDate[];
+  isLoading: boolean;
+  isError: string;
+  fetchTodos: () => Promise<void>;
+  updateTodo: (
+    id: number, values: EditTodoFormValues
+) => Promise<boolean>;
+  deleteTodo: (
+    id: number
+) => Promise<boolean>;
 };
 
 interface TodoProviderProps {
@@ -61,6 +70,58 @@ export function TodoProvider({
         }
     }
 
+    async function updateTodo(
+        id: number,
+        values: EditTodoFormValues,
+    ): Promise <boolean> {
+        try{
+            await updateTodoRequest(id, {
+                todo: values.todo,
+                completed: values.completed,
+            });
+
+            const newDueDate = new Date(
+                `${values.dueDate}T00:00:00`,
+           );
+           
+           setTodos((currentTodos) => 
+                currentTodos.map((currentTodo) =>
+                    currentTodo.id === id
+                        ? {
+                            ...currentTodo,
+                            todo: values.todo,
+                            dueDate: newDueDate,
+                            completed: values.completed,
+                        }
+                        : currentTodo
+                )
+            );
+            return true
+        } catch(caughtError: unknown) {
+            console.error(
+                "Görev güncellenemedi",
+                caughtError,
+            );
+            return false
+        }
+    }
+
+    async function deleteTodo(id: number): Promise<boolean> {
+      try {
+        await deleteTodoRequest(id);
+
+        setTodos((currentTodos) =>
+          currentTodos.filter((currentTodo) => currentTodo.id !== id),
+        );
+
+        return true;
+      } catch (caughtError: unknown) {
+        console.error("Görev silinemedi:", caughtError);
+
+        return false;
+      }
+    }
+
     useEffect( () => {
         fetchTodos();
     }, []);
@@ -72,6 +133,8 @@ export function TodoProvider({
                 isLoading,
                 isError,
                 fetchTodos,
+                updateTodo,
+                deleteTodo,
              }}
             >
                 {children}

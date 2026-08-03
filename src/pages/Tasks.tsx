@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Tasks() {
   const columnNames = ["Görev", "Son Tarih", "Durum", "İşlemler"];
 
-  const { todos, isLoading, isError } = useTodos();
+  const { todos, isLoading, isError, deleteTodo} = useTodos();
   const navigate = useNavigate();
 
   return (
@@ -62,6 +62,7 @@ function Tasks() {
                         <button
                           type="button"
                           aria-label="Görevi Sil"
+                          onClick={() => deleteTodo(todo.id)}
                           className="rounded-xl px-2 py-2 cursor-pointer bg-red-500/20 hover:bg-red-500/50 duration-300"
                         >
                           <Trash2 size={22} aria-hidden="true" />

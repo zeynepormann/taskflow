@@ -17,6 +17,7 @@ import Projects from "./pages/Projects";
 import DashboardLayout from "./layouts/DashboardLayout";
 import Feed from "./pages/Feed";
 import EditTodo from "./pages/EditTodo";
+import ProjectDetail from "./pages/ProjectDetail";
 
 function App() {
     return (
@@ -58,6 +59,8 @@ function App() {
                     path="/favorites"
                     element={<Favorites/>}
                 />
+               
+
                 <Route
                     path="/notifications"
                     element={<Notifications />}
@@ -67,6 +70,10 @@ function App() {
                     path="/projects"
                     element={<Projects />}
                 />
+                 <Route 
+                    path="/projects/:id"
+                    element={<ProjectDetail />}/>
+                
 
                 <Route
                     path="/users"

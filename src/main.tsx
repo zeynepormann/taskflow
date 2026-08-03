@@ -7,17 +7,20 @@ import { ThemeProvider } from './context/ThemeContext.tsx'
 import { AuthProvider } from './context/AuthContext.tsx'
 import { TodoProvider } from './context/TodoContext.tsx'
 import "@fontsource-variable/inter"
+import { ProjectProvider } from './context/ProjectContext.tsx'
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <BrowserRouter>
         <AuthProvider>
           <TodoProvider>
-            <App />
+            <ProjectProvider>
+              <App />
+            </ProjectProvider>
           </TodoProvider>
         </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>
-  </StrictMode>
-)
+  </StrictMode>,
+);

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useTodos } from "../context/TodoContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +8,7 @@ import {
 } from "../schema/editTodoSchema";
 import { useEffect } from "react";
 import Card from "../components/Card";
+
 
 function dateForInput(date: Date): string {
     const year = date.getFullYear();
@@ -24,7 +25,9 @@ function dateForInput(date: Date): string {
 } 
 
 function EditTodo() {
-  const { todos, isLoading, isError } = useTodos(); //context verisi alınır
+  const { todos, isLoading, isError, updateTodo } = useTodos(); //context verisi alınır
+  
+  const navigate = useNavigate();
 
   const { id } = useParams(); //urldeki idyi alır
 
@@ -32,11 +35,13 @@ function EditTodo() {
 
   const selectedTodo = todos.find((currentTodo) => currentTodo.id === todoId); //buradaki currentTodo tanımlanan yeni parametredir
 
+
+
   const {
     register, //inputu react hook forma baglar <input {...register("todo")} ... => spread operatoru
     handleSubmit, //form gonderilince zod dogrulamasını calıstırır    <form onSubmit = {handleSubmit (onSubmit)} form valid-> onSubmit(data)
     reset, //formun butun input degerleriin sonrada degistirilmesini saglar
-    formState: { errors }, //ic ice destructuring
+    formState: { errors, isSubmitting }, //ic ice destructuring
   } = useForm<EditTodoFormValues>({
     resolver: zodResolver(editTodoSchema), //from gonderildiginde verileri editTodoSchemaya gonderir
 
@@ -61,6 +66,18 @@ function EditTodo() {
     });
   }, [selectedTodo, reset]); //dependency array denir effectin hangi degerleri takip ettigini soyler selectedTodo degisirse degisir,reset de yazdık cunku icinde kullanıldı
 
+  async function onSubmit(
+    data: EditTodoFormValues,
+  ): Promise <void> {
+        const isSuccess = await updateTodo(
+            todoId,
+            data,
+        );
+        if (isSuccess){
+            navigate("/tasks");
+        }
+  }
+
   if (isLoading) {
     return <p>Görev yükleniyor..</p>;
   }
@@ -75,17 +92,99 @@ function EditTodo() {
     <div className="w-full px-6 py-4">
       <div className="mx-auto w-full max-w-7xl ">
         <Card className="w-full p-0 shadow-2xl">
-          <div className="overflow-x-auto px-2">
-            <h1 className="text-xl font-bold "> Görevi değiştir </h1>
-            <div className="font-semibold py-3">
-              <p>Görev ID: {selectedTodo.id} </p>
-              <p>Görev: {selectedTodo.todo} </p>
-              <p>
-                Durum:
-                {selectedTodo.completed ? "Tamamlandı" : "Devam Ediyor"}
-              </p>
+          <form 
+            onSubmit={handleSubmit(onSubmit)} 
+            className="flex flex-col  mt-6 space-y-5">
+            <div>
+              <label htmlFor="todo" className="mb-2 block font-medium">
+                Görev açıklaması
+              </label>
+
+              <textarea
+                id="todo"
+                rows={4}
+                {...register("todo")}
+                className="
+                w-full rounded-xl
+                border border-border bg-input
+                px-4 py-3 text-foreground
+                outline-none
+                focus:border-ring focus:ring-2
+                focus:ring-ring
+            "
+              />
+
+              {errors.todo?.message && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.todo.message}
+                </p>
+              )}
             </div>
-          </div>
+
+            <div>
+              <label htmlFor="dueDate" className="mb-2 block font-medium">
+                Son tarih
+              </label>
+
+              <input
+                id="dueDate"
+                type="date"
+                {...register("dueDate")}
+                className="
+                h-12 w-full rounded-xl
+                border border-border bg-input
+                px-4 text-foreground
+                outline-none
+                focus:border-ring focus:ring-2
+                focus:ring-ring
+            "
+              />
+
+              {errors.dueDate?.message && (
+                <p className="mt-2 text-sm text-red-500">
+                  {errors.dueDate.message}
+                </p>
+              )}
+            </div>
+
+            <label className="flex items-center gap-3">
+              <input
+                type="checkbox"
+                {...register("completed")}
+                className="h-5 w-5 accent-primary"
+              />
+
+              <span>Görev tamamlandı</span>
+            </label>
+
+            <div className="flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => navigate("/tasks")}
+                className="
+                rounded-xl border border-border
+                px-5 py-3 transition-colors
+                hover:bg-muted cursor-pointer
+            "
+              >
+                İptal
+              </button>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="
+                rounded-xl bg-primary
+                px-5 py-3 font-semibold
+                text-primary-foreground
+                transition-opacity
+                cursor-pointer
+            "
+              >
+                {isSubmitting ? "Kaydediliyor..." : "Değişiklikleri kaydet"}
+              </button>
+            </div>
+          </form>
         </Card>
       </div>
     </div>
