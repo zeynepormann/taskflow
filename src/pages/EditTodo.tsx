@@ -90,8 +90,8 @@ function EditTodo() {
 
   return (
     <div className="w-full px-6 py-4">
-      <div className="mx-auto w-full max-w-7xl ">
-        <Card className="w-full p-0 shadow-2xl">
+      l
+        <Card className="w-full px-4 shadow-2xl">
           <form 
             onSubmit={handleSubmit(onSubmit)} 
             className="flex flex-col  mt-6 space-y-5">
@@ -187,7 +187,7 @@ function EditTodo() {
           </form>
         </Card>
       </div>
-    </div>
+   
   );
 }
 export default EditTodo;

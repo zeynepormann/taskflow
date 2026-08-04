@@ -5,11 +5,12 @@ import {
     useState,
     type ReactNode
 } from "react";
-import { getTodos } from "../services/todoService";
+import { addTodoRequest, getTodos } from "../services/todoService";
 import type { TodoWithDate } from "../types/todo";
 import { updateTodoRequest, deleteTodoRequest } from "../services/todoService";
 import type { EditTodoFormValues } from "../schema/editTodoSchema";
-
+import type { AddTodoFormValues } from "../schema/addTodoSchema";
+import { useAuth } from "./AuthContext";
 
 interface TodoContextValue {
   todos: TodoWithDate[];
@@ -22,6 +23,9 @@ interface TodoContextValue {
   deleteTodo: (
     id: number
 ) => Promise<boolean>;
+    addTodo: (
+        values: AddTodoFormValues,
+) => Promise<boolean>;
 };
 
 interface TodoProviderProps {
@@ -33,6 +37,7 @@ const TodoContext = createContext<TodoContextValue | undefined>(undefined);
 export function TodoProvider({
     children,
 }: TodoProviderProps){
+    const {user} = useAuth();
     const [todos, setTodos] = useState<TodoWithDate[]>([]);
     const [isLoading, setisLoading] = useState<boolean>(false);
     const [isError, setisError] = useState<string>("");
@@ -74,11 +79,22 @@ export function TodoProvider({
         id: number,
         values: EditTodoFormValues,
     ): Promise <boolean> {
+        
+        const selectedTodo = todos.find(
+            (todo) => todo.id === id,
+        );
+
+        if(!selectedTodo){
+            console.error("Güncellenecek görev bulunamadı");
+            return false;
+        }
         try{
-            await updateTodoRequest(id, {
+            if(!selectedTodo.isLocal){
+                await updateTodoRequest(id, {
                 todo: values.todo,
                 completed: values.completed,
-            });
+                });
+            }
 
             const newDueDate = new Date(
                 `${values.dueDate}T00:00:00`,
@@ -102,13 +118,22 @@ export function TodoProvider({
                 "Görev güncellenemedi",
                 caughtError,
             );
-            return false
+            return false;
         }
     }
 
     async function deleteTodo(id: number): Promise<boolean> {
-      try {
-        await deleteTodoRequest(id);
+        const selectedTodo = todos.find((todo) => todo.id === id);
+
+        if(!selectedTodo){
+            console.error("Silinecek görev bulunamadı");
+            return false;
+        }
+        
+        try {
+            if (!selectedTodo?.isLocal) {
+             await deleteTodoRequest(id);
+        }
 
         setTodos((currentTodos) =>
           currentTodos.filter((currentTodo) => currentTodo.id !== id),
@@ -120,6 +145,40 @@ export function TodoProvider({
 
         return false;
       }
+    }
+
+    async function addTodo(values: AddTodoFormValues): Promise<boolean>{
+        if(!user){
+            console.error("Görev eklemek için kullanıcı bulunamadı");
+            return false;
+        }
+        try { 
+            const createdTodo = await addTodoRequest({
+                todo: values.todo,
+                completed: values.completed,
+                userId: user.id,
+            });
+
+            const newTodo: TodoWithDate = {
+              ...createdTodo,
+              id: Date.now(), //Date.now() her yeni görev için yerel ve farklı bir sayı üretir.
+              dueDate: new Date(` ${values.dueDate}T00:00:00`),
+              isLocal: true, //isLocal: true, bu görevin DummyJSON sunucusunda bulunmadığını anlatır.
+            };
+
+            setTodos( (currentTodos) => [
+                newTodo,
+                ...currentTodos,
+            ]);
+
+            return true;
+        }catch (caughtError: unknown){
+            console.error(
+                "Görev eklenemedi",
+                caughtError
+            );
+            return false;
+        }
     }
 
     useEffect( () => {
@@ -135,6 +194,7 @@ export function TodoProvider({
                 fetchTodos,
                 updateTodo,
                 deleteTodo,
+                addTodo,
              }}
             >
                 {children}

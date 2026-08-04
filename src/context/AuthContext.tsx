@@ -37,7 +37,19 @@ const AuthContext = createContext<
 export function AuthProvider({
     children,
 }: AuthProviderProps) {
-    const [user, setUser] = useState<AuthUser | null> (null);
+    const [user, setUser] = useState<AuthUser | null>(() => {
+        const storedUser = sessionStorage.getItem("authUser");
+
+        if(!storedUser){
+            return null;
+        }
+        try{
+            return JSON.parse(storedUser) as AuthUser;
+        } catch{
+            sessionStorage.removeItem("authUser");
+            return null;
+        }
+    });
 
     const [token, setToken] = useState<string | null> (
         () => sessionStorage.getItem("accessToken"),
@@ -57,6 +69,11 @@ export function AuthProvider({
 
             setUser(authenticatedUser);
             setToken(authenticatedUser.accessToken);
+
+            sessionStorage.setItem(
+                "authUser",
+                JSON.stringify(authenticatedUser),
+            );
 
             sessionStorage.setItem(
                 "accessToken",
@@ -89,8 +106,10 @@ export function AuthProvider({
         setToken(null);
         setError("");
 
+        sessionStorage.removeItem("authUser");
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("refreshToken");
+       
     }
     return (
         <AuthContext.Provider

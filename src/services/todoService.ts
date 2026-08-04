@@ -1,5 +1,6 @@
 import api from "../api/axiosInstance";
-import type { TodoResponse } from "../types/todo";
+import type { AddTodoFormValues } from "../schema/addTodoSchema";
+import type { TodoResponse, AddTodoRequest, Todo } from "../types/todo";
 
 export async function getTodos(): Promise<TodoResponse> {
   const response = await api.get<TodoResponse>("/todos");
@@ -24,4 +25,15 @@ export async function deleteTodoRequest(  //silme fonksyionu
     id: number
 ): Promise<void> {  
   await api.delete(`/todos/${id}`);
+}
+
+export async function addTodoRequest(
+  todoData: AddTodoRequest,
+):Promise<Todo>{
+  const response = await api.post<Todo>
+    (
+      "/todos/add",
+      todoData,
+    );
+    return response.data
 }
