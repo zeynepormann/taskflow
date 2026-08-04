@@ -1,0 +1,17 @@
+{
+    "manageProjects" : "Projelerini Yönet",
+    "menu" : "Menü",
+    "dashboard": "Ana Sayfa",
+    "projects": "Projeler",
+    "tasks": "Görevler",
+    "calendar": "Takvim",
+    "users": "Kullanıcılar",
+    "feed": "Duyurular",
+    "newTaskPlan": "Yeni görev planla",
+    "newTaskCreateandPlan": "Yeni görev oluştur ve planlamaya başla",
+    "newTask": "Yeni görev",
+    "shortcuts": "Kısayollar",
+    "favorites": "Favoriler",
+    "notifications": "Bildirimler",
+    "logout": "Çıkış"
+}

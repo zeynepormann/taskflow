@@ -1,0 +1,17 @@
+{
+  "manageProjects": "Manage Your Projects",
+  "menu": "Menu",
+  "dashboard": "Dashboard",
+  "projects": "Projects",
+  "tasks": "Tasks",
+  "calendar": "Calendar",
+  "users": "Users",
+  "feed": "Feed",
+  "newTaskPlan": "Plan a new task",
+  "newTaskCreateandPlan": "Create a new task and start planning.",
+  "newTask": "New task",
+  "shortcuts": "Shortcuts",
+  "favorites": "Favorites",
+  "notifications": "Notifications",
+  "logout": "Logout"
+}
