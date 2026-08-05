@@ -1,0 +1,20 @@
+{
+    "task": "Görev",
+    "dueDate": "Son Tarih",
+    "status": "Durum",
+    "action": "İşlemler",
+    "addNewTask": "Yeni Görev Ekle",
+    "taskDescription": "Görev Açıklaması",
+    "taskPlaceholder": "Görevinizi Yazın",
+    "taskCheckbox": "Görev Tamamlandı",
+    "saveTask": "Görevi Kaydet",
+    "savingTask": "Görev Kaydediliyor",
+    "taskError": "Görev Bulunamadı",
+    "taskCancel": "İptal",
+    "saveTaskChanges": "Değişiklikleri Kaydet",
+    "taskUploaded": "Görev Yükleniyor",
+    "validation": {
+    "todoRequired": "Görev açıklaması zorunludur.",
+    "dueDateRequired": "Son tarih zorunludur."
+    }   
+}

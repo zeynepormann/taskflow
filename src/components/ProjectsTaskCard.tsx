@@ -2,7 +2,7 @@ import type { Project } from "../types/projects";
 import Card from "./Card";
 import { Link } from "react-router-dom";
 import { Star } from "lucide-react"
-
+import { useTranslation } from "react-i18next";
 
 interface ProjectTaskProps {
   project: Project;
@@ -10,6 +10,7 @@ interface ProjectTaskProps {
 }
 
 function ProjectTaskCard({ project, handleToggleFavorite }: ProjectTaskProps) {
+  const { t } = useTranslation("projects");
   return (
     <Card className="p-6">
       <div className="flex flex-col gap-4 font-medium">
@@ -32,13 +33,27 @@ function ProjectTaskCard({ project, handleToggleFavorite }: ProjectTaskProps) {
         <div className="flex flex-col gap-2">
           <p className="text-muted-foreground">{project.description}</p>
 
-          <p>İlerleme: %{project.progress}</p>
+          <p>
+            {t("progress", {
+              value: project.progress,
+            })}
+          </p>
 
-          <p>Üye: {project.memberCount}</p>
+          <p>
+            {t("members", {
+              count: project.memberCount,
+            })}
+          </p>
 
-          <p>Son güncelleme: {project.updatedAt}</p>
+          <p>
+            {t("lastUpdated", {
+              date: project.updatedAt,
+            })}
+          </p>
 
-          <p>Durum: {project.status}</p>
+          <p>
+            {t("statusLabel")} {t(`status.${project.status}`)}
+          </p>
         </div>
 
         <div className="flex flex-col">
@@ -46,7 +61,7 @@ function ProjectTaskCard({ project, handleToggleFavorite }: ProjectTaskProps) {
             to={`/projects/${project.id}`}
             className="mt-4 font-bold cursor-pointer"
           >
-            Detayları Gör
+            {t("viewDetails")}
           </Link>
         </div>
       </div>

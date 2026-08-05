@@ -1,0 +1,14 @@
+{
+  "headerTitle": "Projelerin",
+  "progress": "İlerleme: %{{value}}",
+  "members": "Üye: {{count}}",
+  "lastUpdated": "Son Güncelleme: {{date}}",
+  "statusLabel": "Durum:",
+  "status": {
+    "active": "Aktif",
+    "planning": "Planlanıyor",
+    "completed": "Tamamlandı"
+  },
+  "viewDetails": "Detayları Gör",
+  "task": "Görev: {{count}}"
+}

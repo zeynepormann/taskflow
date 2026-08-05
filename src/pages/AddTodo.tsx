@@ -4,8 +4,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
 import { useTodos } from "../context/TodoContext";
+import { useTranslation } from "react-i18next";
 
 function AddTodo() {
+  const { t } = useTranslation("tasks");
+  
   const {
     register,
     handleSubmit,
@@ -22,6 +25,8 @@ function AddTodo() {
   
   const { addTodo }  = useTodos();
   const navigate = useNavigate();   
+  
+  
 
   async function onSubmit(data: AddTodoFormValues):Promise<void> {
     const isSuccess = await addTodo(data);
@@ -41,19 +46,19 @@ function AddTodo() {
           >
             <div>
               <label htmlFor="todo" className="mb-2 block font-medium">
-                Görev Açıklaması
+                {t("taskDescription")}
               </label>
               <input
                 id="todo"
                 type="text"
-                placeholder="Görevinizi yazın"
+                placeholder={t("taskPlaceholder")}
                 {...register("todo")}
                 className="h-12 w-full rounded-xl border border-border bg-input px-4"
               />
               <div className="min-h-7 pt-2">
                 {errors.todo?.message && (
                   <p className="mt-2 text-sm text-red-500" role="alert">
-                    {errors.todo.message}
+                    {t(errors.todo.message)}
                   </p>
                 )}
               </div>
@@ -69,12 +74,12 @@ function AddTodo() {
                 {...register("completed")}
                 className="cursor-pointer accent-primary h-4 w-4 rounded-xl" //accent-primary: checkbox isaretli rengini tema rengiyle uyumlu yapar
               />
-              <span className="font-medium">Görev tamamlandı</span>
+              <span className="font-medium"> {t("taskCheckbox")}</span>
             </label>
 
             <div>
               <label htmlFor="dueDate" className="mb-2 block font-medium ">
-                Son Tarih
+                {t("dueDate")}
               </label>
               <input
                 id="dueDate"
@@ -85,7 +90,7 @@ function AddTodo() {
               <div className="min-h-7 pt-2">
                 {errors.dueDate?.message && (
                   <p className="mt-2 text-sm text-red-500" role="alert">
-                    {errors.dueDate.message}
+                    {t(errors.dueDate.message)}
                   </p>
                 )}
               </div>
@@ -96,7 +101,7 @@ function AddTodo() {
               disabled={isSubmitting}
               className="h-11 w-full cursor-pointer rounded-xl text-primary-foreground bg-primary px-4 "
             >
-              {isSubmitting ? "Kaydediliyor" : "Görevi Kaydet"}
+              {isSubmitting ? t("savingTask") : t("saveTask")}
             </button>
           </form>
         </Card>

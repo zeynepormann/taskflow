@@ -1,16 +1,13 @@
-import {z} from "zod"
+import { z } from "zod";
+
 
 export const addTodoSchema = z.object({
-  todo: z
-    .string()
-    .trim()
-    .min(1, "Görev açıklaması zorunludur"),
+    todo: z.string().trim().min(1, "validation.todoRequired"),
 
-  dueDate: z
-    .string()
-    .min(1, "Son tarih zorunludur"),
+    dueDate: z.string().min(1, "validation.dueDateRequired"),
 
-  completed: z.boolean(),
-});
+    completed: z.boolean(),
+  });
 
-export type AddTodoFormValues = z.infer<typeof addTodoSchema>
+
+export type AddTodoFormValues = z.infer<typeof addTodoSchema>;

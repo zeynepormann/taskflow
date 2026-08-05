@@ -8,7 +8,7 @@ import {
 } from "../schema/editTodoSchema";
 import { useEffect } from "react";
 import Card from "../components/Card";
-
+import { useTranslation } from "react-i18next";
 
 function dateForInput(date: Date): string {
     const year = date.getFullYear();
@@ -25,6 +25,8 @@ function dateForInput(date: Date): string {
 } 
 
 function EditTodo() {
+  const { t } = useTranslation("tasks");
+
   const { todos, isLoading, isError, updateTodo } = useTodos(); //context verisi alınır
   
   const navigate = useNavigate();
@@ -35,13 +37,13 @@ function EditTodo() {
 
   const selectedTodo = todos.find((currentTodo) => currentTodo.id === todoId); //buradaki currentTodo tanımlanan yeni parametredir
 
-
+  
 
   const {
     register, //inputu react hook forma baglar <input {...register("todo")} ... => spread operatoru
     handleSubmit, //form gonderilince zod dogrulamasını calıstırır    <form onSubmit = {handleSubmit (onSubmit)} form valid-> onSubmit(data)
     reset, //formun butun input degerleriin sonrada degistirilmesini saglar
-    formState: { errors, isSubmitting }, //ic ice destructuring
+    formState: { errors, isSubmitting, isDirty }, //ic ice destructuring
   } = useForm<EditTodoFormValues>({
     resolver: zodResolver(editTodoSchema), //from gonderildiginde verileri editTodoSchemaya gonderir
 
@@ -79,32 +81,32 @@ function EditTodo() {
   }
 
   if (isLoading) {
-    return <p>Görev yükleniyor..</p>;
+    return <p>{t("taskUploaded")}</p>;
   }
   if (isError) {
     return <p>{isError}</p>;
   }
   if (!selectedTodo) {
-    return <p>Görev bulunamadı..</p>;
+    return <p>{t("taskError")}</p>;
   }
 
   return (
     <div className="w-full px-6 py-4">
-      l
-        <Card className="w-full px-4 shadow-2xl">
-          <form 
-            onSubmit={handleSubmit(onSubmit)} 
-            className="flex flex-col  mt-6 space-y-5">
-            <div>
-              <label htmlFor="todo" className="mb-2 block font-medium">
-                Görev açıklaması
-              </label>
+      <Card className="w-full px-4 shadow-2xl">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="flex flex-col  mt-6 space-y-5"
+        >
+          <div>
+            <label htmlFor="todo" className="mb-2 block font-medium">
+              {t("taskDescription")}
+            </label>
 
-              <textarea
-                id="todo"
-                rows={4}
-                {...register("todo")}
-                className="
+            <textarea
+              id="todo"
+              rows={4}
+              {...register("todo")}
+              className="
                 w-full rounded-xl
                 border border-border bg-input
                 px-4 py-3 text-foreground
@@ -112,25 +114,23 @@ function EditTodo() {
                 focus:border-ring focus:ring-2
                 focus:ring-ring
             "
-              />
+            />
 
-              {errors.todo?.message && (
-                <p className="mt-2 text-sm text-red-500">
-                  {errors.todo.message}
-                </p>
-              )}
-            </div>
+            {errors.todo?.message && (
+              <p className="mt-2 text-sm text-red-500">{t(errors.todo.message)}</p>
+            )}
+          </div>
 
-            <div>
-              <label htmlFor="dueDate" className="mb-2 block font-medium">
-                Son tarih
-              </label>
+          <div>
+            <label htmlFor="dueDate" className="mb-2 block font-medium">
+              {t("dueDate")}
+            </label>
 
-              <input
-                id="dueDate"
-                type="date"
-                {...register("dueDate")}
-                className="
+            <input
+              id="dueDate"
+              type="date"
+              {...register("dueDate")}
+              className="
                 h-12 w-full rounded-xl
                 border border-border bg-input
                 px-4 text-foreground
@@ -138,56 +138,58 @@ function EditTodo() {
                 focus:border-ring focus:ring-2
                 focus:ring-ring
             "
-              />
+            />
 
-              {errors.dueDate?.message && (
-                <p className="mt-2 text-sm text-red-500">
-                  {errors.dueDate.message}
-                </p>
-              )}
-            </div>
+            {errors.dueDate?.message && (
+              <p className="mt-2 text-sm text-red-500">
+                {t(errors.dueDate.message)}
+              </p>
+            )}
+          </div>
 
-            <label className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                {...register("completed")}
-                className="h-5 w-5 accent-primary"
-              />
+          <label className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              {...register("completed")}
+              className="h-5 w-5 accent-primary"
+            />
 
-              <span>Görev tamamlandı</span>
-            </label>
+            <span> {t("taskCheckbox")}</span>
+          </label>
 
-            <div className="flex justify-end gap-3">
-              <button
-                type="button"
-                onClick={() => navigate("/tasks")}
-                className="
+          <div className="flex justify-end gap-3 mb-4">
+            <button
+              type="button"
+              onClick={() => navigate("/tasks")}
+              className="
                 rounded-xl border border-border
                 px-5 py-3 transition-colors
                 hover:bg-muted cursor-pointer
             "
-              >
-                İptal
-              </button>
+            >
+              {t("taskCancel")}
+            </button>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="
+            <button
+              type="submit"
+              disabled={!isDirty || isSubmitting}
+              className="
                 rounded-xl bg-primary
                 px-5 py-3 font-semibold
                 text-primary-foreground
                 transition-opacity
                 cursor-pointer
+                transition-colors
+                hover:bg-primary/90
+                duration-300
             "
-              >
-                {isSubmitting ? "Kaydediliyor..." : "Değişiklikleri kaydet"}
-              </button>
-            </div>
-          </form>
-        </Card>
-      </div>
-   
+            >
+              {isSubmitting ? t("savingTask") : t("saveTaskChanges")}
+            </button>
+          </div>
+        </form>
+      </Card>
+    </div>
   );
 }
 export default EditTodo;

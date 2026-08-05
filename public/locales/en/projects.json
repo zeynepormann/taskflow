@@ -1,0 +1,14 @@
+{
+  "headerTitle": "Your Projects",
+  "progress": "Progress: %{{value}}",
+  "members": "Member: {{count}}",
+  "lastUpdated": "Last Updated: {{date}}",
+  "statusLabel": "Durum:",
+  "status": {
+    "active": "Active",
+    "planning": "Planning",
+    "completed": "Completed"
+  },
+  "viewDetails": "View Details",
+  "task": "Task: {{count}}"
+}

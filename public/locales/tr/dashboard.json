@@ -1,0 +1,9 @@
+{
+  "welcome": "Hoşgeldin, {{name}}",
+  "subtitle": "Genel işlerini burada görebilirsin.",
+  "upcomingTasks": "Yaklaşan görevler",
+  "completedTasks": "Tamamlanan görevler",
+  "overdueTasks": "Geciken görevler",
+  "emptyTasks": "Görev bulunmuyor.",
+  "loading": "Görevler yükleniyor..."
+}

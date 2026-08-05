@@ -1,24 +1,44 @@
 import { Languages } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
+type LanguageCode = "tr" | "en";
+
+interface LanguageOption {
+  code: LanguageCode;
+  label: string;
+  ariaLabel: string;
+}
+
+const TurkishLanguage: LanguageOption = {
+    code: "tr",
+    label: "TR",
+    ariaLabel: "Türkçeye geç",
+};
+
+const EnglishLanguage: LanguageOption = {
+    code: "en",
+    label: "EN",
+    ariaLabel: "İngilizceye geç",
+};
+
 function LanguageSwitcher(){
     const { i18n } = useTranslation();
 
-    const currentLanguage = i18n.resolvedLanguage ?? i18n.language;
+    const nextLanguage: LanguageOption = 
+        i18n.language === TurkishLanguage.code
+            ? EnglishLanguage
+            : TurkishLanguage;
 
-    const isTurkish = currentLanguage.startsWith("tr");
-
-    function handleLanguageChange(): void{
-
-        const nextLanguage = isTurkish ? "en" : "tr";
-
-        void i18n.changeLanguage(nextLanguage);    
+    function handleLanguageChange(): void {
+        void i18n.changeLanguage(
+            nextLanguage.code,
+        );
     }
     return (
       <button
         type="button"
         onClick={handleLanguageChange}
-        aria-label={isTurkish ? "İngilizceye geç" : "Türkçeye geç"}
+        aria-label={nextLanguage.ariaLabel}
         className="
             flex items-center justify-around
             relative h-10 w-20 cursor-pointer rounded-full 
@@ -37,10 +57,9 @@ function LanguageSwitcher(){
             size={18}
             aria-hidden="true"
         />
-        <span>
-            {isTurkish ? "EN" : "TR"}
-        </span>
+        <span>{nextLanguage.label}</span>
       </button>
+
     );
 }
 export default LanguageSwitcher;

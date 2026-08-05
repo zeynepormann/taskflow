@@ -2,8 +2,11 @@ import { useProjects } from "../context/ProjectContext";
 import Card from "../components/Card";
 import {Star} from  "lucide-react"
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Favorites(){
+    const { t } = useTranslation("projects");
+
     const {projects, toggleFavorite} = useProjects();
 
     const favoriteProjects = projects.filter(
@@ -38,20 +41,36 @@ function Favorites(){
                 <div className="flex flex-col">
                   <p>{project.description}</p>
 
-                  <p>İlerleme: %{project.progress}</p>
+                  <p>
+                    {t("progress", {
+                      value: project.progress,
+                    })}
+                  </p>
 
-                  <p>Üye: {project.memberCount}</p>
+                  <p>
+                    {t("members", {
+                      count: project.memberCount,
+                    })}
+                  </p>
 
-                  <p>Görev: {project.taskCount}</p>
+                  <p>
+                    {t("task", {
+                      count: project.taskCount,
+                    })}
+                  </p>
 
-                  <p>Son Güncelleme: {project.updatedAt}</p>
+                  <p>
+                    {t("lastUpdated", {
+                      date: project.updatedAt,
+                    })}
+                  </p>
 
-                  <Link 
-                        to={`/projects/${project.id}`}
-                        className="mt-4 font-bold cursor-pointer">
-                            Detayları Gör
-                    </Link>
-
+                  <Link
+                    to={`/projects/${project.id}`}
+                    className="mt-4 font-bold cursor-pointer"
+                  >
+                    {t("viewDetails")}
+                  </Link>
                 </div>
               </div>
             </Card>

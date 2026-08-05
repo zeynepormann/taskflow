@@ -1,14 +1,17 @@
 import Card from "../components/Card";
 import { useTodos } from "../context/TodoContext";
 import { Pencil, Trash2, Plus} from "lucide-react";
-import { Navigate, useNavigate } from "react-router-dom";
-import AddTodo from "./AddTodo";
+import {useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function Tasks() {
-  const columnNames = ["Görev", "Son Tarih", "Durum", "İşlemler"];
+  const { t } = useTranslation("tasks");
 
-  const { todos, isLoading, isError, deleteTodo} = useTodos();
+  const columnNames = [t("task"), t("dueDate"), t("status"), t("action")];
+
+  const { todos,  deleteTodo} = useTodos();
   const navigate = useNavigate();
+  
 
   return (
     <div className="w-full px-4">
@@ -20,7 +23,7 @@ function Tasks() {
           className="flex items-center h-11 px-4 rounded-xl cursor-pointer bg-primary text-sans text-primary-foreground transition-colors duration-300 hover:bg-primary-hover"
         >
           <Plus size={20} aria-hidden="true" />
-          <span>Yeni Görev</span>
+          <span> {t("addNewTask")}</span>
         </button>
       </div>
       <div className="mx-auto w-full max-w-8xl">

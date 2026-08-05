@@ -1,0 +1,9 @@
+{
+  "welcome": "Welcome, {{name}}",
+  "subtitle": "You can see your general work here.",
+  "upcomingTasks": "Upcoming tasks",
+  "completedTasks": "Completed tasks",
+  "overdueTasks": "Overdue tasks",
+  "emptyTasks": "No tasks found.",
+  "loading": "Tasks are loading..."
+}

@@ -16,10 +16,11 @@ void i18n
         ],
 
         ns: [
-            "sidebar"
+            "sidebar",
+            "dashboard",
+            "projects",
+            "tasks",
         ],
-
-        defaultNS: "sidebar",
 
         backend: {
             loadPath:
