@@ -1,5 +1,4 @@
 import api from "../api/axiosInstance";
-import type { AddTodoFormValues } from "../schema/addTodoSchema";
 import type { TodoResponse, AddTodoRequest, Todo } from "../types/todo";
 
 export async function getTodos(): Promise<TodoResponse> {

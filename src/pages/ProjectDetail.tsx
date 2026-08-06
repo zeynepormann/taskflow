@@ -1,12 +1,12 @@
-import Favorites from "./Favorites"
-import { Link, useParams } from "react-router-dom";
+
+import {  useParams } from "react-router-dom";
 
 import { useProjects } from "../context/ProjectContext";
 
 function ProjectDetail(){
     const { id } = useParams();
 
-    const { projects, toggleFavorite } = useProjects();
+    const { projects} = useProjects();
 
     const projectId = Number(id);
 

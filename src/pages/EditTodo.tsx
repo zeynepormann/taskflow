@@ -1,5 +1,4 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useTodos } from "../context/TodoContext";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -9,6 +8,9 @@ import {
 import { useEffect } from "react";
 import Card from "../components/Card";
 import { useTranslation } from "react-i18next";
+import { useTodosQuery } from "../hooks/useTodosQuery";
+import { useUpdateMutation } from "../hooks/useUpdateMutation";
+
 
 function dateForInput(date: Date): string {
     const year = date.getFullYear();
@@ -27,13 +29,19 @@ function dateForInput(date: Date): string {
 function EditTodo() {
   const { t } = useTranslation("tasks");
 
-  const { todos, isLoading, isError, updateTodo } = useTodos(); //context verisi alınır
-  
   const navigate = useNavigate();
 
   const { id } = useParams(); //urldeki idyi alır
 
   const todoId = Number(id);  //stringi tekrardan numbera donusturur  12==="12" -> 12===12
+
+  const  {
+    data: todos = [],
+    isPending,
+    isError,
+  } = useTodosQuery();
+
+  const updateTodoMutation = useUpdateMutation();
 
   const selectedTodo = todos.find((currentTodo) => currentTodo.id === todoId); //buradaki currentTodo tanımlanan yeni parametredir
 
@@ -71,16 +79,18 @@ function EditTodo() {
   async function onSubmit(
     data: EditTodoFormValues,
   ): Promise <void> {
-        const isSuccess = await updateTodo(
-            todoId,
-            data,
-        );
-        if (isSuccess){
-            navigate("/tasks");
+        try{
+          await updateTodoMutation.mutateAsync({
+            id: todoId,
+            values: data,
+          });
+          navigate("/tasks");
+        } catch{
+
         }
   }
 
-  if (isLoading) {
+  if (isPending) {
     return <p>{t("taskUploaded")}</p>;
   }
   if (isError) {
@@ -177,7 +187,6 @@ function EditTodo() {
                 rounded-xl bg-primary
                 px-5 py-3 font-semibold
                 text-primary-foreground
-                transition-opacity
                 cursor-pointer
                 transition-colors
                 hover:bg-primary/90

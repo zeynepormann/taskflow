@@ -1,16 +1,33 @@
 import Card from "../components/Card";
-import { useTodos } from "../context/TodoContext";
 import { Pencil, Trash2, Plus} from "lucide-react";
 import {useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useTodosQuery } from "../hooks/useTodosQuery";
+import { useDeleteMutation } from "../hooks/useDeleteMutation";
 
 function Tasks() {
   const { t } = useTranslation("tasks");
 
   const columnNames = [t("task"), t("dueDate"), t("status"), t("action")];
 
-  const { todos,  deleteTodo} = useTodos();
   const navigate = useNavigate();
+
+  const {
+    data: todos = [],
+    isPending,
+    isError,
+    error
+  } = useTodosQuery();
+  
+  const deleteTodoMutation = useDeleteMutation(); 
+
+  if(isPending){
+    return <p>Görevler Yükleniyor...</p>
+  }
+
+  if(isError){
+    return <p>{error.message}</p>
+  }
   
 
   return (
@@ -78,7 +95,8 @@ function Tasks() {
                         <button
                           type="button"
                           aria-label="Görevi Sil"
-                          onClick={() => deleteTodo(todo.id)}
+                          onClick={() => deleteTodoMutation.mutate(todo.id)}
+                          disabled={deleteTodoMutation.isPending}
                           className="rounded-xl px-2 py-2 cursor-pointer bg-red-500/20 hover:bg-red-500/50 duration-300"
                         >
                           <Trash2 size={22} aria-hidden="true" />

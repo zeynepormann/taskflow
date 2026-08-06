@@ -1,21 +1,29 @@
-
-import { useAuth } from "../context/AuthContext";
-import { useTodos } from "../context/TodoContext";
+import { useAuth } from "../context/AuthContext"; //kullanıcı ismini gostermek icin kalması gerekiyor 
 import TaskSummaryCard from "../components/TaskSummaryCard";
 import { ListTodo, LayoutList, ListChecks } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { useTodosQuery } from "../hooks/useTodosQuery";
+
 
 
 function Dashboard() {
   const { t } = useTranslation("dashboard");
+
   const { user } = useAuth();
+
   const firstname = user?.firstName ?? "Kullanıcı";
 
-  const { todos, isLoading, isError } = useTodos();
   const today = new Date();
+
+  const {
+    data: todos = [],
+    isPending,
+    isError,
+  } = useTodosQuery();
+
   today.setHours(0, 0, 0, 0);
 
-  if (isLoading) {
+  if (isPending) {
     return <p>{t("loading")}</p>;
   }
   if (isError) {

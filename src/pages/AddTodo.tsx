@@ -3,8 +3,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Card from "../components/Card";
 import { useNavigate } from "react-router-dom";
-import { useTodos } from "../context/TodoContext";
 import { useTranslation } from "react-i18next";
+import { useAddMutation } from "../hooks/useAddMutation";
 
 function AddTodo() {
   const { t } = useTranslation("tasks");
@@ -23,16 +23,17 @@ function AddTodo() {
     },
   });
   
-  const { addTodo }  = useTodos();
   const navigate = useNavigate();   
   
+  const addTodoMutation = useAddMutation();
   
 
   async function onSubmit(data: AddTodoFormValues):Promise<void> {
-    const isSuccess = await addTodo(data);
-
-    if(isSuccess){
-        navigate("/tasks");
+    try{
+      await addTodoMutation.mutateAsync(data);
+      navigate("/tasks");
+    } catch {
+  
     }
   }
 
