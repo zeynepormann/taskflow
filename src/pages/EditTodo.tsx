@@ -6,25 +6,22 @@ import {
   type EditTodoFormValues,
 } from "../schema/editTodoSchema";
 import { useEffect } from "react";
-import Card from "../components/Card";
+import Card from "../components/card/Card";
 import { useTranslation } from "react-i18next";
 import { useTodosQuery } from "../hooks/useTodosQuery";
 import { useUpdateMutation } from "../hooks/useUpdateMutation";
 
-
 function dateForInput(date: Date): string {
-    const year = date.getFullYear();
+  const year = date.getFullYear();
 
-    const month = String(
-        date.getMonth() + 1,  //js ayları 0 dan sayar +1 ekle
-    ).padStart(2, "0");  //iki haneden kucukse basına 0 ekler-> "2" -> "02"
+  const month = String(
+    date.getMonth() + 1, //js ayları 0 dan sayar +1 ekle
+  ).padStart(2, "0"); //iki haneden kucukse basına 0 ekler-> "2" -> "02"
 
-    const day = String(
-        date.getDate(),
-    ).padStart(2,"0");
+  const day = String(date.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;  //tarihleri birlestirir 2026-07-30
-} 
+  return `${year}-${month}-${day}`; //tarihleri birlestirir 2026-07-30
+}
 
 function EditTodo() {
   const { t } = useTranslation("tasks");
@@ -33,19 +30,13 @@ function EditTodo() {
 
   const { id } = useParams(); //urldeki idyi alır
 
-  const todoId = Number(id);  //stringi tekrardan numbera donusturur  12==="12" -> 12===12
+  const todoId = Number(id); //stringi tekrardan numbera donusturur  12==="12" -> 12===12
 
-  const  {
-    data: todos = [],
-    isPending,
-    isError,
-  } = useTodosQuery();
+  const { data: todos = [], isPending, isError } = useTodosQuery();
 
   const updateTodoMutation = useUpdateMutation();
 
   const selectedTodo = todos.find((currentTodo) => currentTodo.id === todoId); //buradaki currentTodo tanımlanan yeni parametredir
-
-  
 
   const {
     register, //inputu react hook forma baglar <input {...register("todo")} ... => spread operatoru
@@ -63,31 +54,30 @@ function EditTodo() {
     },
   });
 
-  useEffect( ()=> {
-    if(!selectedTodo) { //ilk renderda gorev bulunamamıssa diye effect burada durur
-        return;
+  useEffect(() => {
+    if (!selectedTodo) {
+      //ilk renderda gorev bulunamamıssa diye effect burada durur
+      return;
     }
-    reset({   //reset contexteki gorevi degistirmez sadece gorev degerlerini RHF un duzenlenebilir stateine kopyalar!!
-        todo: selectedTodo.todo, //formdaki görev acıklamasını mevcut gorev acıklaması yapar 
-        dueDate: dateForInput(   //context icindeki Date nesnesini inputun anlayacagı stringe cevirir
-            selectedTodo.dueDate,
-        ),
-        completed: selectedTodo.completed,  //formdaki checkboxun baslangıc durumunu belirler 
+    reset({
+      //reset contexteki gorevi degistirmez sadece gorev degerlerini RHF un duzenlenebilir stateine kopyalar!!
+      todo: selectedTodo.todo, //formdaki görev acıklamasını mevcut gorev acıklaması yapar
+      dueDate: dateForInput(
+        //context icindeki Date nesnesini inputun anlayacagı stringe cevirir
+        selectedTodo.dueDate,
+      ),
+      completed: selectedTodo.completed, //formdaki checkboxun baslangıc durumunu belirler
     });
   }, [selectedTodo, reset]); //dependency array denir effectin hangi degerleri takip ettigini soyler selectedTodo degisirse degisir,reset de yazdık cunku icinde kullanıldı
 
-  async function onSubmit(
-    data: EditTodoFormValues,
-  ): Promise <void> {
-        try{
-          await updateTodoMutation.mutateAsync({
-            id: todoId,
-            values: data,
-          });
-          navigate("/tasks");
-        } catch{
-
-        }
+  async function onSubmit(data: EditTodoFormValues): Promise<void> {
+    try {
+      await updateTodoMutation.mutateAsync({
+        id: todoId,
+        values: data,
+      });
+      navigate("/tasks");
+    } catch {}
   }
 
   if (isPending) {
@@ -127,7 +117,9 @@ function EditTodo() {
             />
 
             {errors.todo?.message && (
-              <p className="mt-2 text-sm text-red-500">{t(errors.todo.message)}</p>
+              <p className="mt-2 text-sm text-red-500">
+                {t(errors.todo.message)}
+              </p>
             )}
           </div>
 

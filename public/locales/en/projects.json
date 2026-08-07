@@ -10,5 +10,6 @@
     "completed": "Completed"
   },
   "viewDetails": "View Details",
-  "task": "Task: {{count}}"
+  "task": "Task: {{count}}",
+  "favoritesTitle": "Your Favorites"
 }

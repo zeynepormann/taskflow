@@ -1,14 +1,14 @@
 import { addTodoSchema, type AddTodoFormValues } from "../schema/addTodoSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Card from "../components/Card";
+import Card from "../components/card/Card";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAddMutation } from "../hooks/useAddMutation";
 
 function AddTodo() {
   const { t } = useTranslation("tasks");
-  
+
   const {
     register,
     handleSubmit,
@@ -22,19 +22,16 @@ function AddTodo() {
       completed: false,
     },
   });
-  
-  const navigate = useNavigate();   
-  
-  const addTodoMutation = useAddMutation();
-  
 
-  async function onSubmit(data: AddTodoFormValues):Promise<void> {
-    try{
+  const navigate = useNavigate();
+
+  const addTodoMutation = useAddMutation();
+
+  async function onSubmit(data: AddTodoFormValues): Promise<void> {
+    try {
       await addTodoMutation.mutateAsync(data);
       navigate("/tasks");
-    } catch {
-  
-    }
+    } catch {}
   }
 
   return (

@@ -14,7 +14,7 @@ import Favorites from "./pages/Favorites";
 import Notifications from "./pages/Notifications";
 import Users from "./pages/Users";
 import Projects from "./pages/Projects";
-import DashboardLayout from "./layouts/DashboardLayout";
+import MainLayout from "./layouts/MainLayout";
 import Feed from "./pages/Feed";
 import EditTodo from "./pages/EditTodo";
 import ProjectDetail from "./pages/ProjectDetail";
@@ -31,7 +31,7 @@ function App() {
             </Route>
 
             <Route element={<ProtectedRoute />}>
-                <Route element={<DashboardLayout />}>
+                <Route element={<MainLayout />}>
                 <Route
                     path="/dashboard"
                     element={<Dashboard />}

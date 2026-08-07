@@ -10,5 +10,6 @@
     "completed": "Tamamlandı"
   },
   "viewDetails": "Detayları Gör",
-  "task": "Görev: {{count}}"
+  "task": "Görev: {{count}}",
+  "favoritesTitle": "Favorilerin"
 }

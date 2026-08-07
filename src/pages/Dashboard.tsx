@@ -1,10 +1,11 @@
-import { useAuth } from "../context/AuthContext"; //kullanıcı ismini gostermek icin kalması gerekiyor 
-import TaskSummaryCard from "../components/TaskSummaryCard";
+import { useAuth } from "../context/AuthContext"; //kullanıcı ismini gostermek icin kalması gerekiyor
+import TaskSummaryCard from "../components/dashboard/TaskSummaryCard";
 import { ListTodo, LayoutList, ListChecks } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useTodosQuery } from "../hooks/useTodosQuery";
-
-
+import PageHeader from "../components/page/PageHeader";
+import PageBody from "../components/page/PageBody";
+import PageLayout from "../components/page/PageLayout";
 
 function Dashboard() {
   const { t } = useTranslation("dashboard");
@@ -15,11 +16,7 @@ function Dashboard() {
 
   const today = new Date();
 
-  const {
-    data: todos = [],
-    isPending,
-    isError,
-  } = useTodosQuery();
+  const { data: todos = [], isPending, isError } = useTodosQuery();
 
   today.setHours(0, 0, 0, 0);
 
@@ -41,17 +38,15 @@ function Dashboard() {
   );
 
   return (
-    <div className="flex flex-col px-3 gap-10">
-      <div>
-        <h1 className="flex items-center text-2xl font-bold ">
-          {t("welcome",{
-            name: firstname,
-          })}
-        </h1>
-        <p className="text-xs font-semibold">{t("subtitle")}</p>
-      </div>
+    <PageLayout>
+      <PageHeader
+        title={t("welcome", {
+          name: firstname,
+        })}
+        description={t("subtitle")}
+      />
 
-      <div className="grid gird-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <PageBody className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         <TaskSummaryCard
           title={t("upcomingTasks")}
           tasks={upcomingTasks}
@@ -69,8 +64,8 @@ function Dashboard() {
           tasks={overdueTasks}
           icon={ListTodo}
         />
-      </div>
-    </div>
+      </PageBody>
+    </PageLayout>
   );
 }
 export default Dashboard;
