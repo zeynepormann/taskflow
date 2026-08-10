@@ -74,12 +74,13 @@ function ProjectCard({
             </CardItem>
           )}
         </CardItems>
-
+          
         <Link
           to={`/projects/${project.id}`}
           className="mt-auto cursor-pointer pt-4 font-bold"
         >
           {t("viewDetails")}
+
         </Link>
       </CardBody>
     </Card>

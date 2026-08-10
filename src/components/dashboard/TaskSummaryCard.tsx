@@ -16,7 +16,7 @@ interface TaskSummaryProps {
 function TaskSummaryCard({ title, tasks, icon: Icon }: TaskSummaryProps) {
   const { t } = useTranslation("tasks");
   return (
-    <Card className="h-full min-h-100 rounded-xl bg-muted p-5 shadow-xl">
+    <Card className="h-full min-h-100 rounded-xl p-5 shadow-xl">
       <CardBody>
         <CardHead>
           <Icon size={30} aria-hidden="true" className="shrink-0" />

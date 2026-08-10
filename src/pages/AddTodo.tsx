@@ -40,7 +40,7 @@ function AddTodo() {
         <Card className="w-full p-0 shadow-2xl ">
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-1 items-center gap-5 p-6 md:grid-cols-2"
+            className="grid grid-cols-1 items-start gap-5 p-6 md:grid-cols-2"
           >
             <div>
               <label htmlFor="todo" className="mb-2 block font-medium">
@@ -53,27 +53,32 @@ function AddTodo() {
                 {...register("todo")}
                 className="h-12 w-full rounded-xl border border-border bg-input px-4"
               />
-              <div className="min-h-7 pt-2">
-                {errors.todo?.message && (
-                  <p className="mt-2 text-sm text-red-500" role="alert">
-                    {t(errors.todo.message)}
+              {errors.todo?.message && (
+                <div className="pt-2">
+                  <p className="text-sm text-red-500" role="alert">
+                    {t(errors.todo?.message)}
                   </p>
-                )}
-              </div>
+                </div>
+              )}
             </div>
 
-            <label
-              htmlFor="completed"
-              className="flex h-12 w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-muted/40 px-4 "
-            >
-              <input
-                id="completed"
-                type="checkbox"
-                {...register("completed")}
-                className="cursor-pointer accent-primary h-4 w-4 rounded-xl" //accent-primary: checkbox isaretli rengini tema rengiyle uyumlu yapar
-              />
-              <span className="font-medium"> {t("taskCheckbox")}</span>
-            </label>
+            <div>
+              <label className="mb-2 block font-medium opacity-0 select-none" aria-hidden="true">
+                {t("taskDescription")}
+              </label>
+              <label
+                htmlFor="completed"
+                className="flex h-12 w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-muted/40 px-4"
+              >
+                <input
+                  id="completed"
+                  type="checkbox"
+                  {...register("completed")}
+                  className="h-4 w-4 cursor-pointer rounded-xl accent-primary" //accent-primary: checkbox isaretli rengini tema rengiyle uyumlu yapar
+                />
+                <span className="font-medium">{t("taskCheckbox")}</span>
+              </label>
+            </div>
 
             <div>
               <label htmlFor="dueDate" className="mb-2 block font-medium ">
@@ -85,22 +90,28 @@ function AddTodo() {
                 {...register("dueDate")}
                 className="h-12 w-full rounded-xl border border-border bg-input px-4"
               />
-              <div className="min-h-7 pt-2">
-                {errors.dueDate?.message && (
-                  <p className="mt-2 text-sm text-red-500" role="alert">
-                    {t(errors.dueDate.message)}
-                  </p>
-                )}
-              </div>
-            </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="h-11 w-full cursor-pointer rounded-xl text-primary-foreground bg-primary px-4 "
-            >
-              {isSubmitting ? t("savingTask") : t("saveTask")}
-            </button>
+              {errors.dueDate?.message && (
+                <div className="pt-2">
+                  <p className="text-sm text-red-500" role="alert">
+                    {t(errors.dueDate?.message)}
+                  </p>
+                </div>
+              )}
+            </div>
+              
+            <div>
+              <label className="mb-2 block font-medium opacity-0 select-none" aria-hidden="true">
+                {t("dueDate")}
+              </label>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="h-12 w-full cursor-pointer rounded-xl bg-primary px-4 text-primary-foreground"
+              >
+                {isSubmitting ? t("savingTask") : t("saveTask")}
+              </button>
+            </div>
           </form>
         </Card>
       </div>
