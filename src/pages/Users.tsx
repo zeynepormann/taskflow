@@ -3,10 +3,12 @@ import Card from "../components/card/Card";
 import PageLayout from "../components/page/PageLayout";
 import PageBody from "../components/page/PageBody";
 import UserTable from "../components/users/UserTable";
+import { useTranslation } from "react-i18next";
 
 function Users(){
     const {data: user = []} = useUsersQuery();
-    const columnNames = ["ID", "Ad", "Soyad", "Kullanıcı Adı", "Email"];
+    const { t } = useTranslation("users");
+    const columnNames = [t("id"), t("firstname"), t("lastname"), t("username"), t("email")];
     
     return (
       <PageLayout>

@@ -20,6 +20,7 @@ void i18n
             "dashboard",
             "projects",
             "tasks",
+            "users",
         ],
 
         backend: {

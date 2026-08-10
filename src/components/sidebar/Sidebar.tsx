@@ -70,7 +70,7 @@ function Sidebar() {
               to="/tasks/new"
             />
           </div>
-          <div className=" ">
+          <div>
             <MenuGroupItem title={t("shortcuts")} />
             <MenuItems>
               <MenuItem to="/favorites" label={t("favorites")} icon={Star} />
