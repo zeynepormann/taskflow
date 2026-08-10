@@ -16,21 +16,20 @@ function TaskTableRow({
   isDeleting,
 }: TaskTableRowProps) {
   return (
-    <tr className="border-t border-border">
-      <td className="wrap-break-word px-1 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm">
+    <tr className="flex w-full items-center border-t border-border">
+      <td className="min-w-0 shrink-0 basis-1/2 px-1 py-3 sm:px-6">
         {todo.todo}
       </td>
 
-      <td className="wrap-break-word px-1 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm">
+      <td className="min-w-0 shrink-0 basis-1/6 px-1 py-3 sm:px-6">
         {todo.dueDate.toLocaleDateString("tr-TR")}
       </td>
 
-      <td className="wrap-break-word px-1 py-3 text-xs sm:px-6 sm:py-4 sm:text-sm">
+      <td className="min-w-0 shrink-0 basis-1/6 px-1 py-3 sm:px-6">
         {todo.completed ? "Tamamlandı" : "Devam ediyor"}
       </td>
 
-      <td className="px-1 py-3 sm:px-6 sm:py-4">
-        <div className="flex flex-row gap-5">
+      <td className="flex min-w-0 shrink-0 basis-1/6 justify-center gap-3 py-3 sm:px-6">
           <button
             type="button"
             aria-label="Görevi Düzenle"
@@ -61,7 +60,7 @@ function TaskTableRow({
           >
             <Trash2 size={22} aria-hidden="true" />
           </button>
-        </div>
+    
       </td>
     </tr>
   );

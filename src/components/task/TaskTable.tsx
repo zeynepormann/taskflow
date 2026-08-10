@@ -19,22 +19,15 @@ function TaskTable({
   isDeleting,
 }: TaskTableProps) {
   return (
-    <div className="overflow-x-auto">
+    <div className="w-full overflow-x-auto">
       <table className="w-full table-fixed">
-        <colgroup>
-          <col className="w-[38%] lg:w-[45%]" />
-          <col className="w-[21%] lg:w-[20%]" />
-          <col className="w-[21%] lg:w-[20%]" />
-          <col className="w-[20%] lg:w-[15%]" />
-        </colgroup>
-
         <thead className="bg-muted">
-          <tr>
+          <tr className="flex w-full">
             {columnNames.map((columnName) => (
               <th
                 key={columnName}
                 scope="col"
-                className="px-1 py-2 text-left font-sans sm:px-6 sm:py-3"
+                className="min-w-0 basis-1/6 px-1 py-2 text-left font-sans first:basis-1/2 last:text-center sm:px-6 sm:py-3"
               >
                 {columnName}
               </th>
