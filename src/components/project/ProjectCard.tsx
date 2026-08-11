@@ -25,66 +25,70 @@ function ProjectCard({
 }: ProjectCardProps) {
   const { t } = useTranslation("projects");
 
-  return (
-    <Card className="flex h-full flex-col gap-4 p-6 font-medium">
-      <CardHead className="justify-between">
-        <h2 className="text-lg font-bold">{project.name}</h2>
+   return (
+    <Card className="relative h-full p-0 font-medium">
+      <Link
+        to={`/projects/${project.id}`}
+        className="flex h-full cursor-pointer flex-col gap-4 p-6"
+      >
+        <CardHead className="pr-10">
+          <h2 className="text-lg font-bold">{project.name}</h2>
+        </CardHead>
 
+        <CardBody className="flex flex-1 flex-col">
+          <CardItems className="gap-2">
+            <CardItem className="text-muted-foreground">
+              {project.description}
+            </CardItem>
+
+            <CardItem>
+              {t("progress", {
+                value: project.progress,
+              })}
+            </CardItem>
+
+            <CardItem>
+              {t("members", {
+                count: project.memberCount,
+              })}
+            </CardItem>
+
+            {showTaskCount && (
+              <CardItem>
+                {t("task", {
+                  count: project.taskCount,
+                })}
+              </CardItem>
+            )}
+
+            <CardItem>
+              {t("lastUpdated", {
+                date: project.updatedAt,
+              })}
+            </CardItem>
+
+            {showStatus && (
+              <CardItem>
+                {t("statusLabel")} {t(`status.${project.status}`)}
+              </CardItem>
+            )}
+          </CardItems>
+
+          <span className="mt-auto pt-4 font-bold">
+            {t("viewDetails")}
+          </span>
+        </CardBody>
+      </Link>
+
+      <div className="absolute right-6 top-6 z-10">
         <FavoriteButton
           isFavorite={project.isFavorite}
           onClick={() => onToggleFavorite(project.id)}
         />
-      </CardHead>
-
-      <CardBody className="flex flex-1 flex-col">
-        <CardItems className="gap-2">
-          <CardItem className="text-muted-foreground">
-            {project.description}
-          </CardItem>
-
-          <CardItem>
-            {t("progress", {
-              value: project.progress,
-            })}
-          </CardItem>
-
-          <CardItem>
-            {t("members", {
-              count: project.memberCount,
-            })}
-          </CardItem>
-
-          {showTaskCount && (
-            <CardItem>
-              {t("task", {
-                count: project.taskCount,
-              })}
-            </CardItem>
-          )}
-
-          <CardItem>
-            {t("lastUpdated", {
-              date: project.updatedAt,
-            })}
-          </CardItem>
-
-          {showStatus && (
-            <CardItem>
-              {t("statusLabel")} {t(`status.${project.status}`)}
-            </CardItem>
-          )}
-        </CardItems>
-          
-        <Link
-          to={`/projects/${project.id}`}
-          className="mt-auto cursor-pointer pt-4 font-bold"
-        >
-          {t("viewDetails")}
-
-        </Link>
-      </CardBody>
+      </div>
     </Card>
   );
 }
+
 
 export default ProjectCard;
