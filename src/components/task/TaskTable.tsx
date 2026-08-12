@@ -1,5 +1,3 @@
-import { Pencil, Trash2 } from "lucide-react";
-
 import type { TodoWithDate } from "../../types/todo";
 import TaskTableRow from "./TaskTableRow";
 

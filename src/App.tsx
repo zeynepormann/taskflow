@@ -19,6 +19,7 @@ import Feed from "./pages/Feed";
 import EditTodo from "./pages/EditTodo";
 import ProjectDetail from "./pages/ProjectDetail";
 import AddTodo from "./pages/AddTodo";
+import EditUser from "./pages/EditUser";
 
 function App() {
     return (
@@ -84,7 +85,13 @@ function App() {
                     path="/users"
                     element={<Users />}
                 />
+                <Route
+                    path= "/users/:id/edit"
+                    element= {<EditUser />}
+                />
                 </Route>
+
+                
             </Route>
 
             <Route

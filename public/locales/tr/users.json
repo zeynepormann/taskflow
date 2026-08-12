@@ -3,5 +3,6 @@
   "firstname": "Ad",
   "lastname": "Soyad",
   "username": "Kullanıcı Adı",
-  "email": "E-Posta"
+  "email": "E-Posta",
+  "action": "İşlemler"
 }
