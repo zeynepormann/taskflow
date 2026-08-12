@@ -33,7 +33,7 @@ function Sidebar() {
   }
 
   return (
-    <aside className="hidden h-dvh border-r border-border bg-card lg:block">
+    <aside className="hidden h-dvh left-0 border-r border-border bg-card lg:block">
       <div className="flex flex-col h-full shadow-2xl bg-card p-4 ">
         <SidebarHeader title="Taskflow" description={t("manageProjects")} />
         <Menu>

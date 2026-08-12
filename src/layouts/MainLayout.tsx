@@ -8,7 +8,7 @@ function MainLayout() {
   return (
     <div
       className="
-                min-h-dvh bg-background font-sans
+                h-dvh bg-background font-sans
                 text-foreground transition-colors duration-300
                 lg:grid
                 lg:grid-cols-[280px_minmax(0,1fr)]
@@ -16,7 +16,7 @@ function MainLayout() {
     >
       <Sidebar />
 
-      <div className="min-w-0">
+      <div className="min-w-0 min-h-0 overflow-y-auto">
         <Header/>
 
         <main
