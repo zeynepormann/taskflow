@@ -12,17 +12,17 @@ interface LanguageOption {
 const TurkishLanguage: LanguageOption = {
     code: "tr",
     label: "TR",
-    ariaLabel: "Türkçeye geç",
+    ariaLabel: "common:switchTurkish",
 };
 
 const EnglishLanguage: LanguageOption = {
     code: "en",
     label: "EN",
-    ariaLabel: "İngilizceye geç",
+    ariaLabel: "common:switchEnglish",
 };
 
 function LanguageSwitcher(){
-    const { i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const nextLanguage: LanguageOption = 
         i18n.language === TurkishLanguage.code
@@ -38,7 +38,7 @@ function LanguageSwitcher(){
       <button
         type="button"
         onClick={handleLanguageChange}
-        aria-label={nextLanguage.ariaLabel}
+        aria-label={t(nextLanguage.ariaLabel)}
         className="
             flex items-center justify-around
             relative h-10 w-20 cursor-pointer rounded-full 
