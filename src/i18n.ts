@@ -6,16 +6,19 @@ void i18n
     .use(HttpBackend)
     .use(initReactI18next)
     .init({
-        lng: "tr",
+        lng: "en",
 
-        fallbackLng: "tr",
+        fallbackLng: "en",
 
         supportedLngs: [
             "tr",
             "en",
         ],
 
+        defaultNS: "common",
+
         ns: [
+            "common",
             "sidebar",
             "dashboard",
             "projects",
@@ -32,4 +35,9 @@ void i18n
             escapeValue: false,
         },
     })
+i18n.on("languageChanged", (language) => {
+    document.documentElement.lang = language;
+});
+document.documentElement.lang = "en";
+
 export default i18n
