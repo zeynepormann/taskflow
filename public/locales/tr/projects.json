@@ -11,5 +11,23 @@
   },
   "viewDetails": "Detayları Gör",
   "task": "Görev: {{count}}",
-  "favoritesTitle": "Favorilerin"
+  "favoritesTitle": "Favorilerin",
+  "demo": {
+    "1": {
+      "name": "TaskFlow",
+      "description": "Ekiplerin projelerini ve görevlerini yönetebildiği uygulama"
+    },
+    "2": {
+      "name": "E-Ticaret Yönetimi",
+      "description": "Ürün ve sipariş süreçlerini yöneten web uygulaması"
+    },
+    "3": {
+      "name": "Mobil Bankacılık",
+      "description": "Finans işlemlerini yöneten mobil uygulama"
+    },
+    "4": {
+      "name": "Sohbet Uygulaması (Chat-App)",
+      "description": "Gerçek zamanlı (real-time) mesajlaşma uygulaması"
+    }
+  }
 }

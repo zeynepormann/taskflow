@@ -8,11 +8,11 @@
   "taskPlaceholder": "Write Your Task",
   "taskCheckbox": "Task Completed",
   "saveTask": "Save Task",
-  "savingTask": "Görev Kaydediliyor",
-  "taskError": "The task was not found..",
+  "savingTask": "Saving task…",
+  "taskError": "No tasks found.",
   "taskCancel": "Cancel",
   "saveTaskChanges": "Save Changes",
-  "taskUploaded": "Task Loading",
+  "taskUploaded": "Loading task…",
   "validation": {
     "todoRequired": "Task description is required.",
     "dueDateRequired": "Due date is required."

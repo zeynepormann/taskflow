@@ -4,5 +4,11 @@
   "lastname": "Soyad",
   "username": "Kullanıcı Adı",
   "email": "E-Posta",
-  "action": "İşlemler"
+  "action": "İşlemler",
+  "validation": {
+    "firstnameRequired": "Ad zorunludur.",
+    "lastnameRequired": "Soyad zorunludur.",
+    "usernameRequired": "Kullanıcı adı zorunludur.",
+    "emailRequired": "E-posta zorunludur."
+  }
 }

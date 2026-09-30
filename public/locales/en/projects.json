@@ -1,9 +1,9 @@
 {
   "headerTitle": "Your Projects",
-  "progress": "Progress: %{{value}}",
+  "progress": "Progress: {{value}}%",
   "members": "Member: {{count}}",
   "lastUpdated": "Last Updated: {{date}}",
-  "statusLabel": "Durum:",
+  "statusLabel": "Status:",
   "status": {
     "active": "Active",
     "planning": "Planning",
@@ -11,5 +11,23 @@
   },
   "viewDetails": "View Details",
   "task": "Task: {{count}}",
-  "favoritesTitle": "Your Favorites"
+  "favoritesTitle": "Your Favorites",
+  "demo": {
+    "1": {
+      "name": "TaskFlow",
+      "description": "An application for managing team projects and tasks"
+    },
+    "2": {
+      "name": "E-Commerce Management",
+      "description": "A web application for managing products and orders"
+    },
+    "3": {
+      "name": "Mobile Banking",
+      "description": "A mobile application for managing financial transactions"
+    },
+    "4": {
+      "name": "Chat Application",
+      "description": "A real-time messaging application"
+    }
+  }
 }

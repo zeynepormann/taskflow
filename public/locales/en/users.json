@@ -1,8 +1,14 @@
 {
-    "id" : "ID",
-    "firstname": "First Name",
-    "lastname": "Last Name",
-    "username" : "User Name",
-    "email" : "E-Mail",
-    "action": "Action"
+  "id": "ID",
+  "firstname": "First Name",
+  "lastname": "Last Name",
+  "username": "User Name",
+  "email": "E-Mail",
+  "action": "Action",
+  "validation": {
+    "firstnameRequired": "First name is required.",
+    "lastnameRequired": "Last name is required.",
+    "usernameRequired": "Username is required.",
+    "emailRequired": "Email is required."
+  }
 }
