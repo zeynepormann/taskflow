@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteTodoRequest } from "../services/todoService";
+import type { TodoWithDate } from "../types/todo";
 
 export function useDeleteMutation(){
     const queryClient = useQueryClient();
@@ -11,10 +12,10 @@ export function useDeleteMutation(){
             await deleteTodoRequest(id);
         },
 
-        onSuccess: async () =>  {
-            await queryClient.invalidateQueries({
-                queryKey: ["todos"],    
-            });
+        onSuccess: (_, deletedId) =>  {
+            queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) =>
+                current.filter((todo) => todo.id !== deletedId),
+            );
         },
 
         onError: (error) => {

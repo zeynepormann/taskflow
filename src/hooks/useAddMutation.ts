@@ -6,6 +6,7 @@ import {
 import { addTodoRequest } from "../services/todoService"
 import { useAuth } from "../context/AuthContext"
 import type { AddTodoFormValues } from "../schema/addTodoSchema"
+import type { TodoWithDate } from "../types/todo";
 
 export function useAddMutation(){
     const queryClient = useQueryClient();
@@ -27,10 +28,11 @@ export function useAddMutation(){
             });
         },
 
-        onSuccess: async () => {    //mutasyon hata vermediginde calısır    
-            await queryClient.invalidateQueries({
-                queryKey: ["todos"],   //todos cache'ini gecersiz-eski olarak isaretler yeniden cagırır axios-GET gelen cevap cache yazılır 
-            });
+        onSuccess: (createdTodo, values) => {
+            queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) => [
+                ...current,
+                { ...createdTodo, dueDate: new Date(`${values.dueDate}T12:00:00`), isLocal: true },
+            ]);
         },
 
         onError: (error) => {

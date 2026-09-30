@@ -16,8 +16,8 @@ export function useUpdateUserMutation(){
             values,
         }:UpdateUserVariables): Promise<void> => {
             await updateUserRequest(id,{
-                firstname: values.firstname,
-                lastname: values.lastname,
+                firstName: values.firstname,
+                lastName: values.lastname,
                 username: values.username,
                 email: values.email,
             });
