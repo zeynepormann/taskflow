@@ -15,23 +15,23 @@ function MenuShortcutItem({
     to,
 }: MenuShortcutItemProps){
     return (
-      <div className="mt-5 bg-primary/80 rounded-2xl h-40 text-primary px-4 py-4  gap-4">
+      <div className="mt-6 rounded-2xl bg-primary/10 p-4 text-foreground">
         <div className="flex flex-col gap-2">
-          <p className="text-sm text-background font-semibold font-sans">
+          <p className="text-sm font-semibold">
             {title}
           </p>
-          <p className="text-xs text-background font-semibold font-sans">
+          <p className="text-xs leading-relaxed text-muted-foreground">
             {description}
           </p>
         </div>
 
         <NavLink
           to={to}
-          className="mt-4 h-14 w-50 rounded-2xl bg-border cursor-pointer flex justify-center items-center gap-6 font-semibold text-primary-hover"
+          className="mt-4 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
         >
             <span>{buttonLabel}</span>
             <Plus 
-                size={25}
+                size={18}
                 aria-hidden="true"
             />
         </NavLink>
