@@ -1,15 +1,19 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   editTodoSchema,
   type EditTodoFormValues,
 } from "../schema/editTodoSchema";
 import { useEffect } from "react";
-import Card from "../components/card/Card";
+import { Card } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { useTodosQuery } from "../hooks/useTodosQuery";
 import { useUpdateMutation } from "../hooks/useUpdateMutation";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DatePicker } from "@/components/ui/date-picker";
 
 function dateForInput(date: Date): string {
   const year = date.getFullYear();
@@ -40,6 +44,7 @@ function EditTodo() {
 
   const {
     register, //inputu react hook forma baglar <input {...register("todo")} ... => spread operatoru
+    control,
     handleSubmit, //form gonderilince zod dogrulamasını calıstırır    <form onSubmit = {handleSubmit (onSubmit)} form valid-> onSubmit(data)
     reset, //formun butun input degerleriin sonrada degistirilmesini saglar
     formState: { errors, isSubmitting, isDirty }, //ic ice destructuring
@@ -84,7 +89,7 @@ function EditTodo() {
     return <p>{t("taskUploaded")}</p>;
   }
   if (isError) {
-    return <p>{isError}</p>;
+    return <p>{t("common:loadError")}</p>;
   }
   if (!selectedTodo) {
     return <p>{t("taskError")}</p>;
@@ -102,18 +107,11 @@ function EditTodo() {
               {t("taskDescription")}
             </label>
 
-            <textarea
+            <Textarea
               id="todo"
               rows={4}
               {...register("todo")}
-              className="
-                w-full rounded-xl
-                border border-border bg-input
-                px-4 py-3 text-foreground
-                outline-none
-                focus:border-ring focus:ring-2
-                focus:ring-ring
-            "
+              className="min-h-28"
             />
 
             {errors.todo?.message && (
@@ -128,18 +126,10 @@ function EditTodo() {
               {t("dueDate")}
             </label>
 
-            <input
-              id="dueDate"
-              type="date"
-              {...register("dueDate")}
-              className="
-                h-12 w-full rounded-xl
-                border border-border bg-input
-                px-4 text-foreground
-                outline-none
-                focus:border-ring focus:ring-2
-                focus:ring-ring
-            "
+            <Controller
+              name="dueDate"
+              control={control}
+              render={({ field }) => <DatePicker id="dueDate" placeholder={t("dueDate")} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />}
             />
 
             {errors.dueDate?.message && (
@@ -150,8 +140,7 @@ function EditTodo() {
           </div>
 
           <label className="flex items-center gap-3">
-            <input
-              type="checkbox"
+            <Checkbox
               {...register("completed")}
               className="h-5 w-5 accent-primary"
             />
@@ -160,33 +149,20 @@ function EditTodo() {
           </label>
 
           <div className="flex justify-end gap-3 mb-4">
-            <button
+            <Button
               type="button"
               onClick={() => navigate("/tasks")}
-              className="
-                rounded-xl border border-border
-                px-5 py-3 transition-colors
-                hover:bg-muted cursor-pointer
-            "
+              variant="outline"
             >
               {t("taskCancel")}
-            </button>
+            </Button>
 
-            <button
+            <Button
               type="submit"
               disabled={!isDirty || isSubmitting}
-              className="
-                rounded-xl bg-primary
-                px-5 py-3 font-semibold
-                text-primary-foreground
-                cursor-pointer
-                transition-colors
-                hover:bg-primary/90
-                duration-300
-            "
             >
               {isSubmitting ? t("savingTask") : t("saveTaskChanges")}
-            </button>
+            </Button>
           </div>
         </form>
       </Card>
