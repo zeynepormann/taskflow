@@ -5,11 +5,11 @@ interface PageHeaderProps {
 
 function PageHeader({ title, description }: PageHeaderProps) {
   return (
-    <header>
-      <h1 className="text-2xl font-bold">{title}</h1>
+    <header className="flex flex-col gap-1">
+      <h1 className="text-2xl font-bold tracking-tight sm:text-3xl">{title}</h1>
 
       {description && (              //yalnızca acıklama gönderilirse <p> olusturur
-        <p className="text-xs font-semibold">{description}</p>
+        <p className="max-w-2xl text-sm text-muted-foreground">{description}</p>
       )}
     </header>
   );

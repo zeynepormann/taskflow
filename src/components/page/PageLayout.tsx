@@ -5,7 +5,7 @@ interface PageLayoutProps {
 }
 
 function PageLayout({ children }: PageLayoutProps) {
-  return <div className="flex flex-col gap-10 px-3">{children}</div>;
+  return <div className="flex flex-col gap-7">{children}</div>;
 }
 
 export default PageLayout;

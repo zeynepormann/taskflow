@@ -1,22 +1,18 @@
+import { useTranslation } from "react-i18next";
 import { Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 function NotificationButton() {
+  const { t } = useTranslation("common");
   return (
-    <button
+    <Button
       type="button"
-      aria-label="Bildirimler"
-      className="
-        flex h-10 w-10 cursor-pointer
-        items-center justify-center
-        rounded-xl border border-border
-        bg-card text-muted-foreground
-        transition-colors
-        hover:bg-muted
-        hover:text-foreground
-      "
+      aria-label={t("notifications")}
+      variant="outline"
+      size="icon"
     >
       <Bell size={19} aria-hidden="true" />
-    </button>
+    </Button>
   );
 }
 

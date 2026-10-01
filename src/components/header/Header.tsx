@@ -9,7 +9,7 @@ function Header() {
         flex h-18 items-center
         justify-between
         border-b border-border
-        bg-card px-6 lg:px-8
+        bg-card/95 px-4 backdrop-blur sm:px-6 lg:px-8
       "
     >
       <HeaderLeft />
