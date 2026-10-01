@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface AddTaskButtonProps {
   label: string;
@@ -7,21 +8,15 @@ interface AddTaskButtonProps {
 
 function AddTaskButton({ label, onClick }: AddTaskButtonProps) {
   return (
-    <button
+    <Button
       type="button"
       aria-label={label}
       onClick={onClick}
-      className="
-        flex h-11 cursor-pointer items-center
-        gap-2 rounded-xl bg-primary px-4
-        font-sans text-primary-foreground
-        transition-colors duration-300
-        hover:bg-primary-hover
-      "
+      className="h-11"
     >
       <Plus size={20} aria-hidden="true" />
       <span>{label}</span>
-    </button>
+    </Button>
   );
 }
 

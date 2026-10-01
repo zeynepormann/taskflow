@@ -1,16 +1,21 @@
 import { addTodoSchema, type AddTodoFormValues } from "../schema/addTodoSchema";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Card from "../components/card/Card";
+import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAddMutation } from "../hooks/useAddMutation";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
+import { DatePicker } from "@/components/ui/date-picker";
 
 function AddTodo() {
   const { t } = useTranslation("tasks");
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<AddTodoFormValues>({
@@ -46,12 +51,12 @@ function AddTodo() {
               <label htmlFor="todo" className="mb-2 block font-medium">
                 {t("taskDescription")}
               </label>
-              <input
+              <Input
                 id="todo"
                 type="text"
                 placeholder={t("taskPlaceholder")}
                 {...register("todo")}
-                className="h-12 w-full rounded-xl border border-border bg-input px-4"
+                className="h-12"
               />
               {errors.todo?.message && (
                 <div className="pt-2">
@@ -70,11 +75,11 @@ function AddTodo() {
                 htmlFor="completed"
                 className="flex h-12 w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-muted/40 px-4"
               >
-                <input
+                <Checkbox
                   id="completed"
                   type="checkbox"
                   {...register("completed")}
-                  className="h-4 w-4 cursor-pointer rounded-xl accent-primary" //accent-primary: checkbox isaretli rengini tema rengiyle uyumlu yapar
+                  className="cursor-pointer"
                 />
                 <span className="font-medium">{t("taskCheckbox")}</span>
               </label>
@@ -84,11 +89,10 @@ function AddTodo() {
               <label htmlFor="dueDate" className="mb-2 block font-medium ">
                 {t("dueDate")}
               </label>
-              <input
-                id="dueDate"
-                type="date"
-                {...register("dueDate")}
-                className="h-12 w-full rounded-xl border border-border bg-input px-4"
+              <Controller
+                name="dueDate"
+                control={control}
+                render={({ field }) => <DatePicker id="dueDate" placeholder={t("dueDate")} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />}
               />
 
               {errors.dueDate?.message && (
@@ -104,13 +108,13 @@ function AddTodo() {
               <label className="mb-2 block font-medium opacity-0 select-none" aria-hidden="true">
                 {t("dueDate")}
               </label>
-              <button
+              <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="h-12 w-full cursor-pointer rounded-xl bg-primary px-4 text-primary-foreground"
+                className="h-12 w-full"
               >
                 {isSubmitting ? t("savingTask") : t("saveTask")}
-              </button>
+              </Button>
             </div>
           </form>
         </Card>
