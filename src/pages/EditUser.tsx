@@ -45,7 +45,7 @@ function EditUser(){
         reset({
             firstname: selectedUser.firstName,
             lastname: selectedUser.lastName,
-            username: selectedUser.lastName,
+            username: selectedUser.username,
             email: selectedUser.email,
         });
     }, [selectedUser, reset]);

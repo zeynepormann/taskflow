@@ -8,7 +8,7 @@ import {
 import { useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
-import { useTodosQuery } from "../hooks/useTodosQuery";
+import { useTodoQuery } from "../hooks/useTodosQuery";
 import { useUpdateMutation } from "../hooks/useUpdateMutation";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,11 +36,9 @@ function EditTodo() {
 
   const todoId = Number(id); //stringi tekrardan numbera donusturur  12==="12" -> 12===12
 
-  const { data: todos = [], isPending, isError } = useTodosQuery();
+  const { data: selectedTodo, isPending, isError } = useTodoQuery(todoId);
 
   const updateTodoMutation = useUpdateMutation();
-
-  const selectedTodo = todos.find((currentTodo) => currentTodo.id === todoId); //buradaki currentTodo tanımlanan yeni parametredir
 
   const {
     register, //inputu react hook forma baglar <input {...register("todo")} ... => spread operatoru
