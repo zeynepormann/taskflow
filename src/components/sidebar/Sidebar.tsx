@@ -19,6 +19,7 @@ import MenuItems from "./MenuItems";
 import MenuGroupItem from "./MenuGroupItem";
 import MenuShortcutItem from "./MenuShortcutItem";
 import Menu from "./Menu";
+import { Button } from "@/components/ui/button";
 
 function Sidebar() {
   const { t } = useTranslation("sidebar");
@@ -33,11 +34,13 @@ function Sidebar() {
   }
 
   return (
-    <aside className="hidden h-dvh left-0 border-r border-border bg-card lg:block">
-      <div className="flex flex-col h-full shadow-2xl bg-card p-4 ">
+    <aside className="fixed inset-y-0 left-0 z-40 hidden w-[272px] overflow-hidden border-r border-border bg-card lg:flex lg:flex-col">
+      <div className="flex min-h-0 flex-1 flex-col p-4">
+        <div className="shrink-0 border-b border-border pb-5">
         <SidebarHeader title="Taskflow" description={t("manageProjects")} />
+        </div>
         <Menu>
-          <div className="min-h-0 overflow-y-auto">
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain py-4">
             <div className="mt-2">
               <MenuGroupItem title={t("menu")} />
 
@@ -70,7 +73,7 @@ function Sidebar() {
               to="/tasks/new"
             />
           </div>
-          <div>
+          <div className="shrink-0 border-t border-border pt-4">
             <MenuGroupItem title={t("shortcuts")} />
             <MenuItems>
               <MenuItem to="/favorites" label={t("favorites")} icon={Star} />
@@ -80,14 +83,15 @@ function Sidebar() {
                 icon={Bell}
               />
 
-              <button
+              <Button
                 type="button"
                 onClick={handleLogOut}
-                className="mt-3 flex h-14 w-full cursor-pointer items-center gap-3 rounded-xl bg-primary/10 px-3 text-primary transition-colors duration-300 hover:bg-red-500/50"
+                variant="ghost"
+                className="mt-3 w-full justify-start text-muted-foreground hover:text-destructive"
               >
                 <LogOut size={18} aria-hidden="true" />
                 <span>{t("logout")}</span>
-              </button>
+              </Button>
             </MenuItems>
           </div>
         </Menu>

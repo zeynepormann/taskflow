@@ -8,28 +8,26 @@ function MainLayout() {
   return (
     <div
       className="
-                h-dvh bg-background font-sans
+                min-h-dvh bg-background font-sans
                 text-foreground transition-colors duration-300
-                lg:grid
-                lg:grid-cols-[280px_minmax(0,1fr)]
+                lg:pl-[272px]
             "
     >
       <Sidebar />
 
-      <div className="min-w-0 min-h-0 overflow-y-auto">
+      <div className="min-w-0">
         <Header/>
 
         <main
           className="
                         min-h-[calc(100dvh-72px)]
-                        bg-background px-6 py-8
-                        lg:px-10
+                        bg-background px-4 py-6 sm:px-6 lg:px-8 lg:py-8 xl:px-10
                     "
         >
           <div
             className="
                             mx-auto w-full
-                            max-w-360
+                            max-w-[1440px]
                         "
           >
             <Outlet />
