@@ -1,11 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { TodoWithDate } from "../../types/todo";
 import { useTranslation } from "react-i18next";
-import CardItem from "../card/CardItem";
-import CardItems from "../card/CardItems";
-import CardHead from "../card/CardHead";
-import CardBody from "../card/CardBody";
-import Card from "../card/Card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 interface TaskSummaryProps {
   title: string;
@@ -16,32 +12,28 @@ interface TaskSummaryProps {
 function TaskSummaryCard({ title, tasks, icon: Icon }: TaskSummaryProps) {
   const { t } = useTranslation("tasks");
   return (
-    <Card className="h-full min-h-100 rounded-xl p-5 shadow-xl">
-      <CardBody>
-        <CardHead>
-          <Icon size={30} aria-hidden="true" className="shrink-0" />
+    <Card className="h-full min-h-56">
+      <CardHeader className="flex-row items-center gap-3">
+          <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Icon size={20} aria-hidden="true" /></span>
 
           <div className="min-w-0">
-            <h2 className="text-xl font-bold">
-              {title} {tasks.length}
-            </h2>
+            <p className="text-sm text-muted-foreground">{title}</p><h2 className="text-2xl font-bold">{tasks.length}</h2>
           </div>
-        </CardHead>
+      </CardHeader>
 
-        <div className="min-w-0">
+      <CardContent className="min-w-0">
           {tasks.length === 0 ? (
             <p className="mt-4 text-sm text-muted-foreground">
               {t("taskError")}
             </p>
           ) : (
-            <CardItems className="mt-4 gap-4">
+            <ul className="mt-4 space-y-4">
               {tasks.slice(0, 4).map((task) => (
-                <CardItem key={task.id}>{task.todo}</CardItem>
+                <li key={task.id}>{task.todo}</li>
               ))}
-            </CardItems>
+            </ul>
           )}
-        </div>
-      </CardBody>
+      </CardContent>
     </Card>
   );
 }

@@ -16,12 +16,13 @@ function Breadcrumb() {
     favorites: t("favorites"),
     notifications: t("notifications"),
     new: t("newTask"),
+    edit: t("common:edit"),
   };
 
   const segments = pathname.split("/").filter(Boolean);
 
   return (
-    <nav aria-label="Breadcrumb">
+    <nav aria-label={t("common:breadcrumb")}>
       <ol className="flex min-w-0 items-center gap-2 text-sm">
         <li>
           <Link
