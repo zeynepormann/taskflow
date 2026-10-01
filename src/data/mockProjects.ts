@@ -5,7 +5,7 @@ export const mockProjects: Project[] = [
   {
     id: 1,
     name: "TaskFlow",
-    description: "Ekiplerin projelerini ve görevlerini yönetebildiği uygulama",
+    description: "An application for managing team projects and tasks",
     progress: 65,
     memberCount: 4,
     taskCount: 18,
@@ -16,8 +16,8 @@ export const mockProjects: Project[] = [
 
   {
     id: 2,
-    name: "E-Ticaret Yönetimi",
-    description: "Ürün ve sipariş süreçlerini yöneten web uygulaması",
+    name: "E-Commerce Management",
+    description: "A web application for managing products and orders",
     progress: 30,
     memberCount: 3,
     taskCount: 12,
@@ -28,8 +28,8 @@ export const mockProjects: Project[] = [
 
   {
     id: 3,
-    name: "Mobil Bankacılık",
-    description: "Finans işlemlerini yöneten mobil uygulama",
+    name: "Mobile Banking",
+    description: "A mobile application for managing financial transactions",
     progress: 100,
     memberCount: 5,
     taskCount: 10,
@@ -40,8 +40,8 @@ export const mockProjects: Project[] = [
 
   {
     id: 4,
-    name: "Sohbet Uygulaması (Chat-App)",
-    description: "Gerçek zamanlı (real-time) mesajlaşma uygulaması",
+    name: "Chat Application",
+    description: "A real-time messaging application",
     progress: 75,
     memberCount: 2,
     taskCount: 8,
