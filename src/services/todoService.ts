@@ -7,6 +7,12 @@ export async function getTodos(): Promise<TodoResponse> {
   return response.data;
 }
 
+export async function getTodoById(todoId: number): Promise<Todo> {
+  const response = await api.get<Todo>(`/todos/${todoId}`);
+
+  return response.data;
+}
+
 interface UpdateTodoRequest {
   todo: string;
   completed: boolean;

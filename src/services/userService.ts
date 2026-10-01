@@ -14,8 +14,10 @@ interface UpdateUserRequest {
 export async function updateUserRequest(
   id: number, 
   changes: UpdateUserRequest, 
-): Promise<void> {
-  await api.put(`/users/${id}`, changes);
+): Promise<User> {
+  const response = await api.put<User>(`/users/${id}`, changes);
+
+  return response.data;
 }
 
 export async function deleteUserRequest(
