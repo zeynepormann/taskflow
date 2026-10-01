@@ -1,18 +1,23 @@
+import { useTranslation } from "react-i18next";
 import { Trash2, Pencil } from "lucide-react";
 import type { User } from "../../types/user";
+import { Button } from "@/components/ui/button";
 
 
 interface UserTableRowProps {
     user: User;
     onEdit: (userId: number) => void;
     onDelete: (userId: number) => void;
+    isDeleting: boolean;
 }
 
 function UserTableRow({
   user,
   onEdit,
-  onDelete
+  onDelete,
+  isDeleting,
 }: UserTableRowProps) {
+  const { t } = useTranslation("common");
   return (
     <tr className="flex w-full items-center border-t border-border">
       <td className="min-w-0 shrink-0 basis-1/7 px-1 py-3 sm:px-6  text-center">
@@ -33,34 +38,25 @@ function UserTableRow({
         {user.email}
       </td>
       <td className="flex flex-row gap-2 min-w-0 shrink-0 basis-1/7 px-1 py-3 sm:px-6 items-center justify-center">
-        <button
+        <Button
           type="button"
-          aria-label="Kullanıcıyı Düzenle"
+          aria-label={t("editUser")}
           onClick={() => onEdit(user.id)}
-          className="
-              cursor-pointer rounded-xl
-              bg-green-500/10 px-2 py-2
-              transition-colors duration-300
-              hover:bg-green-500/40
-            "
+          variant="outline"
+          size="icon"
         >
           <Pencil size={22} aria-hidden="true" />
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
-          aria-label="Kullanıcıyı Sil"
+          aria-label={t("deleteUser")}
           onClick={() => onDelete(user.id)}
-          className="
-              cursor-pointer rounded-xl
-              bg-red-500/20 px-2 py-2
-              transition-colors duration-300
-              hover:bg-red-500/50
-              disabled:cursor-not-allowed
-              disabled:opacity-50
-            "
+          disabled={isDeleting}
+          variant="destructive"
+          size="icon"
         >
           <Trash2 size={22} aria-hidden="true" />
-        </button>
+        </Button>
       </td>
     </tr>
   );

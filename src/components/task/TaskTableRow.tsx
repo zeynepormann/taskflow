@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { Pencil, Trash2 } from "lucide-react";
 
 import type { TodoWithDate } from "../../types/todo";
+import { Button } from "@/components/ui/button";
 
 interface TaskTableRowProps {
   todo: TodoWithDate;
@@ -15,6 +17,7 @@ function TaskTableRow({
   onDelete,
   isDeleting,
 }: TaskTableRowProps) {
+  const { t, i18n } = useTranslation("common");
   return (
     <tr className="flex w-full items-center border-t border-border">
       <td className="min-w-0 shrink-0 basis-1/2 px-1 py-3 sm:px-6">
@@ -22,44 +25,34 @@ function TaskTableRow({
       </td>
 
       <td className="min-w-0 shrink-0 basis-1/6 px-1 py-3 sm:px-6">
-        {todo.dueDate.toLocaleDateString("tr-TR")}
+        {todo.dueDate.toLocaleDateString(i18n.resolvedLanguage ?? "en")}
       </td>
 
       <td className="min-w-0 shrink-0 basis-1/6 px-1 py-3 sm:px-6">
-        {todo.completed ? "Tamamlandı" : "Devam ediyor"}
+        {todo.completed ? t("completedStatus") : t("inProgress")}
       </td>
 
       <td className="flex min-w-0 shrink-0 basis-1/6 justify-center gap-3 py-3 sm:px-6">
-          <button
+          <Button
             type="button"
-            aria-label="Görevi Düzenle"
+            aria-label={t("editTask")}
             onClick={() => onEdit(todo.id)}
-            className="
-              cursor-pointer rounded-xl
-              bg-green-500/10 px-2 py-2
-              transition-colors duration-300
-              hover:bg-green-500/40
-            "
+            variant="outline"
+            size="icon"
           >
             <Pencil size={22} aria-hidden="true" />
-          </button>
+          </Button>
 
-          <button
+          <Button
             type="button"
-            aria-label="Görevi Sil"
+            aria-label={t("deleteTask")}
             onClick={() => onDelete(todo.id)}
             disabled={isDeleting}
-            className="
-              cursor-pointer rounded-xl
-              bg-red-500/20 px-2 py-2
-              transition-colors duration-300
-              hover:bg-red-500/50
-              disabled:cursor-not-allowed
-              disabled:opacity-50
-            "
+            variant="destructive"
+            size="icon"
           >
             <Trash2 size={22} aria-hidden="true" />
-          </button>
+          </Button>
     
       </td>
     </tr>
