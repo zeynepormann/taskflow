@@ -1,13 +1,17 @@
+import { useTranslation } from "react-i18next";
 import { useUserQuery } from "../hooks/useUserQuery"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import { useUpdateUserMutation } from "../hooks/useUpdateUserMutation"
 import { editUserSchema, type EditUserFormValues } from "../schema/editUserSchema"
 import { useEffect } from "react"
-import Card from "../components/card/Card"
+import { Card } from "@/components/ui/card"
 import { useParams, useNavigate } from "react-router-dom"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 function EditUser(){
+  const { t } = useTranslation("common");
     const navigate = useNavigate();
 
     const { id } = useParams();
@@ -57,15 +61,15 @@ function EditUser(){
     }
 
     if (isPending){
-        return <p>User Loading</p>
+        return <p>{t("loading")}</p>
     }
     
     if (isError){
-        return <p>{isError}</p>
+        return <p>{t("loadError")}</p>
     }
 
     if(!selectedUser){
-        return <p>User bulunamadı</p>
+        return <p>{t("userNotFound")}</p>
     }
 
     return (
@@ -78,86 +82,80 @@ function EditUser(){
           <div className="flex flex-row items-start gap-4">
             <div className="flex-1">
               <label htmlFor="firstname" className="mb-2 block font-medium">
-                Ad
+                {t("common:firstName")}
               </label>
-              <input
+              <Input
                 id="firstname"            
                 {...register("firstname")}
-                className="w-full rounded-xl border border-border bg-input px-4 py-3 text-foreground outline-none 
-                                    focus:border-ring focus:ring-2 focus:ring-ring"
+                className="h-10"
               />
               {errors.firstname?.message && (
                 <p className="mt-2 text-sm text-red-500">
-                  {errors.firstname.message}
+                  {t(`users:${errors.firstname.message}`)}
                 </p>
               )}
             </div>
 
             <div className="flex-1">
               <label htmlFor="lastname" className="mb-2 block font-medium">
-                Soyad
+                {t("common:lastName")}
               </label>
-              <input
+              <Input
                 id="lastname"
                 {...register("lastname")}
-                className="w-full rounded-xl border border-border bg-input px-4 py-3 text-foreground outline-none 
-                                    focus:border-ring focus:ring-2 focus:ring-ring"
+                className="h-10"
               />
               {errors.lastname?.message && (
                 <p className="mt-2 text-sm text-red-500">
-                  {errors.lastname.message}
+                  {t(`users:${errors.lastname.message}`)}
                 </p>
               )}
             </div>
           </div>
             <div>
               <label htmlFor="username" className="mb-2 block font-medium">
-                Kullanıcı Adı
+                {t("common:username")}
               </label>
-              <input
+              <Input
                 {...register("username")}
-                className="w-full rounded-xl border border-border bg-input px-4 py-3 text-foreground outline-none 
-                                    focus:border-ring focus:ring-2 focus:ring-ring"
+                className="h-10"
               />
               {errors.username?.message && (
                 <p className="mt-2 text-sm text-red-500">
-                  {errors.username.message}
+                  {t(`users:${errors.username.message}`)}
                 </p>
               )}
             </div>
             <div> 
               <label htmlFor="email" className="mb-2 block font-medium">
-                Email
+                {t("email")}
               </label>
-              <input
+              <Input
                 id="email"
                 {...register("email")}
-                className="w-full rounded-xl border border-border bg-input px-4 py-3 text-foreground outline-none 
-                                    focus:border-ring focus:ring-2 focus:ring-ring"
+                className="h-10"
               />
               {errors.email?.message && (
                 <p className="mt-2 text-sm text-red-500">
-                  {errors.email.message}
+                  {t(`users:${errors.email.message}`)}
                 </p>
               )}
             </div>
 
             <div className="flex justify-end gap-3 mb-4">
-              <button
+              <Button
                 type="button"
                 onClick={() => navigate("/users")}
-                className="rounded-xl border border-border px-5 py-3 transition-colors hover:bg-muted cursor-pointer "
+                variant="outline"
               >
-                İptal
-              </button>
-              <button
+                {t("common:cancel")}
+              </Button>
+              <Button
                 type="submit"
                 disabled={!isDirty || isSubmitting}
-                className="rounded-xl bg-primary px-5 py-3 font-semibold text-primary-foreground
-                              cursor-pointer transition-colors hover:bg-primary/90 duration-300"
               >
-                {isSubmitting ? "Kaydediliyor" : "Kaydet"}
-              </button>
+                {isSubmitting ? t("saving") : t("save")}
+              </Button>
             </div>
           </form>
         </Card>
