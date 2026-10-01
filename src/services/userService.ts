@@ -6,8 +6,8 @@ interface UserPaginationProps{
     page: number;
 }
 interface UpdateUserRequest {
-    firstname: string;
-    lastname: string;
+    firstName: string;
+    lastName: string;
     username: string;
     email: string;    
 }
