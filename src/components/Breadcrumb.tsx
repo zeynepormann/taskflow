@@ -36,6 +36,8 @@ function Breadcrumb() {
         {segments.map((segment, index) => {
           const path = `/${segments.slice(0, index + 1).join("/")}`;
           const isLast = index === segments.length - 1;
+          const isIdentifier = /^\d+$/.test(segment);
+          const isNavigable = index === 0 && !isIdentifier;
           const label = routeLabels[segment] ?? segment;
 
           return (
@@ -45,7 +47,7 @@ function Breadcrumb() {
                 className="size-4 shrink-0 text-muted-foreground"
               />
 
-              {isLast ? (
+              {isLast || !isNavigable ? (
                 <span
                   aria-current="page"
                   className="truncate font-medium text-foreground"
