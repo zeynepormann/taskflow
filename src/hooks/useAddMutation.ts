@@ -29,10 +29,17 @@ export function useAddMutation(){
         },
 
         onSuccess: (createdTodo, values) => {
+            const todoWithDate = {
+                ...createdTodo,
+                dueDate: new Date(`${values.dueDate}T12:00:00`),
+                isLocal: true,
+            };
+
             queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) => [
                 ...current,
-                { ...createdTodo, dueDate: new Date(`${values.dueDate}T12:00:00`), isLocal: true },
+                todoWithDate,
             ]);
+            queryClient.setQueryData<TodoWithDate>(["todo", createdTodo.id], todoWithDate);
         },
 
         onError: (error) => {

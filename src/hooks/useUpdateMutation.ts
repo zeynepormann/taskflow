@@ -23,13 +23,18 @@ export function useUpdateMutation(){
         },
 
         onSuccess: (_, { id, values }) => {
-            queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) =>
-                current.map((todo) => todo.id === id ? {
+            const updateTodo = (todo: TodoWithDate) => ({
                     ...todo,
                     todo: values.todo,
                     completed: values.completed,
                     dueDate: new Date(`${values.dueDate}T12:00:00`),
-                } : todo),
+            });
+
+            queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) =>
+                current.map((todo) => todo.id === id ? updateTodo(todo) : todo),
+            );
+            queryClient.setQueryData<TodoWithDate>(["todo", id], (current) =>
+                current ? updateTodo(current) : current,
             );
         },
 

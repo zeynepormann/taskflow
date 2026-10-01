@@ -16,6 +16,7 @@ export function useDeleteMutation(){
             queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) =>
                 current.filter((todo) => todo.id !== deletedId),
             );
+            queryClient.removeQueries({ queryKey: ["todo", deletedId] });
         },
 
         onError: (error) => {
