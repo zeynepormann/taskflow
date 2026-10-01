@@ -1,4 +1,6 @@
+import { useTranslation } from "react-i18next";
 import { Star } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface FavoriteButtonProps {
   isFavorite: boolean;
@@ -6,13 +8,15 @@ interface FavoriteButtonProps {
 }
 
 function FavoriteButton({ isFavorite, onClick }: FavoriteButtonProps) {
+  const { t } = useTranslation("common");
   return (
-    <button
+    <Button
       type="button"
-      aria-label="Favorites"
+      aria-label={t(isFavorite ? "removeFavorite" : "addFavorite")}
       aria-pressed={isFavorite}
       onClick={onClick}
-      className="cursor-pointer"
+      variant="ghost"
+      size="icon"
     >
       <Star
         aria-hidden="true"
@@ -20,7 +24,7 @@ function FavoriteButton({ isFavorite, onClick }: FavoriteButtonProps) {
           isFavorite ? "fill-yellow-300 dark:fill-yellow-500" : "fill-amber-50"
         }
       />
-    </button>
+    </Button>
   );
 }
 
