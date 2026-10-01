@@ -1,4 +1,4 @@
-import Card from "../components/card/Card";
+import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useTodosQuery } from "../hooks/useTodosQuery";
@@ -16,16 +16,16 @@ function Tasks() {
 
   const navigate = useNavigate();
 
-  const { data: todos = [], isPending, isError, error } = useTodosQuery();
+  const { data: todos = [], isPending, isError } = useTodosQuery();
 
   const deleteTodoMutation = useDeleteMutation();
 
   if (isPending) {
-    return <p>Görevler Yükleniyor...</p>;
+    return <p>{t("common:loading")}</p>;
   }
 
   if (isError) {
-    return <p>{error.message}</p>;
+    return <p>{t("common:loadError")}</p>;
   }
 
   return (

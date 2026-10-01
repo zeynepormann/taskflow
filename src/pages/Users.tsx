@@ -1,5 +1,5 @@
 import { useUsersQuery } from "../hooks/useUsersQuery";
-import Card from "../components/card/Card";
+import { Card } from "@/components/ui/card";
 import PageLayout from "../components/page/PageLayout";
 import PageBody from "../components/page/PageBody";
 import UserTable from "../components/users/UserTable";
@@ -8,7 +8,9 @@ import { useTranslation } from "react-i18next";
 import { useState } from "react";
 import { ChevronRight, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useDeleteMutation } from "../hooks/useDeleteMutation";
+import { useDeleteUserRequest } from "../hooks/useDeleteUserMutation";
+import { Button } from "@/components/ui/button";
+import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
 
 function Users(){
     const [page, setPage] = useState(1 )
@@ -19,11 +21,11 @@ function Users(){
     const users = userResponse?.users ?? [];
     const total = userResponse?.total ?? 0;
 
-    const totalPage = Math.ceil(total/10);  
+    const totalPage = Math.ceil(total/limit);
 
     const navigate = useNavigate();
 
-    const deleteUserMutation = useDeleteMutation();
+    const deleteUserMutation = useDeleteUserRequest();
     
     const { t } = useTranslation("users");
     const columnNames = [t("id"), t("firstname"), t("lastname"), t("username"), t("email"), t("action")];
@@ -38,29 +40,36 @@ function Users(){
                 columnNames={columnNames} 
                 onEdit={(userId) => navigate(`/users/${userId}/edit`)} 
                 onDelete={(userId) => deleteUserMutation.mutate(userId)}
-                isDeleting
+                isDeleting={deleteUserMutation.isPending}
               />
-              <div className="flex flex-row justify-end">
-                <div className="flex items-center gap-2 mb-2 mx-6  border border-border bg-muted rounded-xl ">
-                  <button
+              <Pagination className="mb-4 justify-end px-6">
+                <PaginationContent className="rounded-md border border-border bg-muted p-1">
+                  <PaginationItem>
+                  <Button
                     type="button"
+                    aria-label={t("common:previousPage")}
                     disabled={page === 1}
                     onClick={() => setPage((previousPage) => previousPage - 1)}
+                    variant="outline"
+                    size="icon"
                   >
-                    <ChevronLeft className="cursor-pointer rounded-xl h-10 w-12 border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-foreground" />
-                  </button>
-                  <span className="text-foreground font-bold font-sans text-xl flex text-center">
+                    <ChevronLeft />
+                  </Button></PaginationItem>
+                  <PaginationItem className="min-w-12 text-center text-sm font-semibold">
                     {page}/{totalPage}
-                  </span>
-                  <button
+                  </PaginationItem>
+                  <PaginationItem><Button
                     type="button"
+                    aria-label={t("common:nextPage")}
                     disabled={page >= totalPage}
                     onClick={() => setPage((previousPage) => previousPage + 1)}
+                    variant="outline"
+                    size="icon"
                   >
-                    <ChevronRight className="cursor-pointer rounded-xl h-10 w-12 border border-border bg-card text-muted-foreground transition-colors hover:bg-muted hover:text-foreground" />
-                  </button>
-                </div>
-              </div>
+                    <ChevronRight />
+                  </Button></PaginationItem>
+                </PaginationContent>
+              </Pagination>
             </div>
           </Card>
         </PageBody>
