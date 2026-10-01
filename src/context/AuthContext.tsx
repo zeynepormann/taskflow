@@ -90,11 +90,10 @@ export function AuthProvider({
                 axios.isAxiosError<LoginErrorResponse>(caughtError)
             ) {
                 setError (
-                    caughtError.response?.data?.message ??
-                        "Giriş başarısız.",
+                    "loginFailed",
                 );
             } else{
-                setError("Beklenmeyen hata oluştu.");
+                setError("unexpectedError");
             }
             return false;
         } finally {
