@@ -4,14 +4,13 @@ export const loginSchema = z.object({
     username: z 
         .string()
         .trim()
-        .min(1, {error:"Kullanıcı adı zorunludur."}),
-    
+        .min(1, {error:"usernameRequired"}),
+
     password: z
         .string()
-        .min(6, {error: "Şifre en az 6 karakterli olmalı."}),
+        .min(6, {error: "passwordMinimum"}),
 
-        
+
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;
-    
