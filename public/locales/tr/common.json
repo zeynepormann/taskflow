@@ -1,6 +1,7 @@
 {
   "user": "Kullanıcı",
   "loadError": "Veriler yüklenemedi. Lütfen tekrar deneyin.",
+  "retry": "Tekrar dene",
   "workspace": "Kişisel çalışma alanın",
   "dailySummary": "Bugün için {{today}} görevin, toplamda {{open}} açık işin var.",
   "addTask": "Görev ekle",
