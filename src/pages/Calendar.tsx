@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 function Calendar() {
   const { t, i18n } = useTranslation("common");
   const [month, setMonth] = useState(() => new Date());
-  const { data: todos = [], isPending } = useTodosQuery();
+  const { data: todos = [], isPending, isError, refetch } = useTodosQuery();
   const first = new Date(month.getFullYear(), month.getMonth(), 1);
   const firstDay = (first.getDay() + 6) % 7;
   const days = new Date(month.getFullYear(), month.getMonth() + 1, 0).getDate();
@@ -69,6 +69,13 @@ function Calendar() {
           <p className="p-8 text-sm text-muted-foreground">
             {t("common:calendarLoading")}
           </p>
+        ) : isError ? (
+          <div className="flex flex-col items-center gap-3 p-8 text-center" role="alert">
+            <p className="text-sm text-muted-foreground">{t("common:loadError")}</p>
+            <Button type="button" variant="outline" onClick={() => void refetch()}>
+              {t("common:retry")}
+            </Button>
+          </div>
         ) : (
           <div className="grid grid-cols-7">
             {cells.map((day, index) => {
