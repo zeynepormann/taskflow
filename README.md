@@ -106,7 +106,9 @@ New interface text should not be hardcoded in components. Add a translation key 
 
 Task, user, and authentication data are managed through React Query, Context API, and DummyJSON.
 
-DummyJSON is a demo API, so created, edited, and deleted records are not persistent. New tasks are added to the active browser session through the React Query cache and can disappear after a page refresh.
+DummyJSON supplies the initial task/user data and demo login only. Task and user changes are stored as validated, versioned, user-scoped `sessionStorage` overlays and are merged in the frontend data layer. They survive refreshes in the same browser tab but are not server persistence, team synchronization, or authorization.
+
+The route guard is frontend-only. A future backend can replace the service/repository boundary without changing screen components.
 
 When the real backend is introduced, the existing service layer can be connected to real API endpoints and SQL-backed persistent storage.
 
