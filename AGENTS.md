@@ -2,7 +2,7 @@
 
 ## Project Structure & Module Organization
 
-TaskFlow is a React + TypeScript application built with Vite and Tailwind CSS. `src/main.tsx` installs providers; `src/App.tsx` defines routes. Screens live in `src/pages/`, shared components in `src/components/`, and application shells in `src/layouts/`. Keep Axios configuration in `src/api/`, endpoint functions in `src/services/`, and React Query hooks in `src/hooks/`. Context providers belong in `src/context/`; shared types, Zod schemas, and fixtures belong in `src/types/`, `src/schema/`, and `src/data/`. Translation JSON lives in `public/locales/{tr,en}/`. Global theme tokens are defined in `src/index.css`. No automated test suite currently exists.
+TaskFlow is a React + TypeScript application built with Vite and Tailwind CSS. `src/main.tsx` installs providers; `src/App.tsx` defines routes. Screens live in `src/pages/`, shared components in `src/components/`, and application shells in `src/layouts/`. Keep Axios configuration in `src/api/`, endpoint functions in `src/services/`, and React Query hooks in `src/hooks/`. Context providers belong in `src/context/`; shared types, Zod schemas, and fixtures belong in `src/types/`, `src/schema/`, and `src/data/`. Translation JSON lives in `public/locales/{tr,en}/`. Global theme tokens are defined in `src/index.css`. Domain additions use `src/features/`; component and repository tests live beside source as `*.test.tsx`.
 
 ## Build, Test, and Development Commands
 
@@ -12,6 +12,7 @@ TaskFlow is a React + TypeScript application built with Vite and Tailwind CSS. `
 - `npm run build`: run TypeScript checks and create the production bundle.
 - `npm run preview`: serve the production build locally.
 - `npm run lint`: run Oxlint with `.oxlintrc.json` rules.
+- `npm test`: run Vitest regression tests in jsdom.
 
 ## Coding Style & Naming Conventions
 
@@ -19,7 +20,7 @@ Use typed function components, explicit props, and `import type` for type-only i
 
 ## Testing Guidelines
 
-There is no test runner, `npm test` script, coverage threshold, or established test naming convention. Run type checks, lint, and build before submitting. Manually verify affected routes, loading/error/empty states, CRUD behavior, language switching, and both themes. For layout changes, check narrow and wide screens and scroll long pages, including sidebar alignment. Document checks actually performed and any blockers.
+Use Vitest and Testing Library for regression behavior; name tests `*.test.tsx` beside their source. There is no coverage threshold. Run tests, type checks, lint, and build before submitting. Manually verify affected routes, loading/error/empty states, CRUD behavior, language switching, and both themes.
 
 ## Commit & Pull Request Guidelines
 
