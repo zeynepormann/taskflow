@@ -1,22 +1,27 @@
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 
 import Sidebar from "../components/sidebar/Sidebar";
 import Header from "../components/header/Header";
 
-
 function MainLayout() {
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
   return (
     <div
       className="
                 min-h-dvh bg-background font-sans
                 text-foreground transition-colors duration-300
-                lg:pl-[272px]
+                lg:pl-68
             "
     >
-      <Sidebar />
+      <Sidebar
+        mobileOpen={mobileSidebarOpen}
+        onMobileClose={() => setMobileSidebarOpen(false)}
+      />
 
       <div className="min-w-0">
-        <Header/>
+        <Header onOpenSidebar={() => setMobileSidebarOpen(true)} />
 
         <main
           className="
@@ -27,7 +32,7 @@ function MainLayout() {
           <div
             className="
                             mx-auto w-full
-                            max-w-[1440px]
+                            max-w-360
                         "
           >
             <Outlet />
