@@ -1,7 +1,12 @@
 import HeaderLeft from "./HeaderLeft";
 import HeaderRight from "./HeaderRight";
+import type { MouseEventHandler } from "react";
 
-function Header() {
+interface HeaderProps {
+  onOpenSidebar: MouseEventHandler<HTMLButtonElement>;
+}
+
+function Header({ onOpenSidebar }: HeaderProps) {
   return (
     <header
       className="
@@ -12,7 +17,7 @@ function Header() {
         bg-card/95 px-4 backdrop-blur sm:px-6 lg:px-8
       "
     >
-      <HeaderLeft />
+      <HeaderLeft onOpenSidebar={onOpenSidebar} />
       <HeaderRight />
     </header>
   );
