@@ -1,110 +1,52 @@
-import {
-    Navigate,
-    Route,
-    Routes,
-} from "react-router-dom";
-
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import { Navigate, Route, Routes } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
 import Tasks from "./pages/Tasks";
 import Calendar from "./pages/Calendar";
 import Favorites from "./pages/Favorites";
 import Notifications from "./pages/Notifications";
 import Users from "./pages/Users";
 import Projects from "./pages/Projects";
-import MainLayout from "./layouts/MainLayout";
 import Feed from "./pages/Feed";
 import EditTodo from "./pages/EditTodo";
 import ProjectDetail from "./pages/ProjectDetail";
 import AddTodo from "./pages/AddTodo";
 import EditUser from "./pages/EditUser";
+import TaskDetail from "./pages/TaskDetail";
+import NotFound from "./pages/NotFound";
 
 function App() {
-    return (
-        <Routes>
-            <Route element={<AuthLayout />}>
-                <Route
-                    path="/login"
-                    element={<Login />}
-                />
-            </Route>
+  return (
+    <Routes>
+      <Route element={<AuthLayout />}>
+        <Route path="/login" element={<Login />} />
+      </Route>
 
-            <Route element={<ProtectedRoute />}>
-                <Route element={<MainLayout />}>
-                <Route
-                    path="/dashboard"
-                    element={<Dashboard />}
-                />
+      <Route element={<ProtectedRoute />}>
+        <Route element={<MainLayout />}>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/tasks/new" element={<AddTodo />} />
+          <Route path="/tasks/:id/edit" element={<EditTodo />} />
+          <Route path="/tasks/:id" element={<TaskDetail />} />
+          <Route path="/calendar" element={<Calendar />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/favorites" element={<Favorites />} />
+          <Route path="/notifications" element={<Notifications />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="/projects/:id" element={<ProjectDetail />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/users/:id/edit" element={<EditUser />} />
+        </Route>
+      </Route>
 
-                 <Route
-                    path="/tasks"
-                    element={<Tasks />}
-                />
-                <Route
-                    path="/tasks/new"
-                    element={<AddTodo />}
-                />
-                <Route
-                    path="/tasks/:id/edit"
-                    element= {<EditTodo />}
-                />
-
-                <Route
-                    path="/calendar"
-                    element={<Calendar />}
-                />
-
-                 <Route
-                    path="/feed"
-                    element={<Feed />}
-                />
-
-                <Route
-                    path="/favorites"
-                    element={<Favorites/>}
-                />
-               
-
-                <Route
-                    path="/notifications"
-                    element={<Notifications />}
-                />
-
-                <Route
-                    path="/projects"
-                    element={<Projects />}
-                />
-                 <Route 
-                    path="/projects/:id"
-                    element={<ProjectDetail />}/>
-                
-
-                <Route
-                    path="/users"
-                    element={<Users />}
-                />
-                <Route
-                    path= "/users/:id/edit"
-                    element= {<EditUser />}
-                />
-                </Route>
-
-                
-            </Route>
-
-            <Route
-                path="/"
-                element={<Navigate to="/login" replace />}
-            />
-
-            <Route
-                path="*"
-                element={<Navigate to="/login" replace />}
-            />
-        </Routes>
-    );
+      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
 }
 
 export default App;
