@@ -53,7 +53,7 @@ export function ConfirmDialog({
         aria-describedby="confirm-dialog-description"
         className="relative w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-2xl"
       >
-        <div className="flex size-11 items-center justify-center rounded-xl text-destructive">
+        <div className="flex size-11 items-center justify-center rounded-xl text-destructive bg-destructive/10">
           <AlertTriangle className="size-5" aria-hidden="true" />
         </div>
         <h2 id="confirm-dialog-title" className="mt-4 text-lg font-semibold">
