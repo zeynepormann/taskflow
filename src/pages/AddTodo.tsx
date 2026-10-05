@@ -1,125 +1,38 @@
-import { addTodoSchema, type AddTodoFormValues } from "../schema/addTodoSchema";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAddMutation } from "../hooks/useAddMutation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DatePicker } from "@/components/ui/date-picker";
+import { Card } from "@/components/ui/card";
+import { TaskForm } from "@/components/task/TaskForm";
+import { useAddMutation } from "@/hooks/useAddMutation";
+import type { TaskFormValues } from "@/schema/taskSchema";
 
 function AddTodo() {
   const { t } = useTranslation("tasks");
-
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-  } = useForm<AddTodoFormValues>({
-    resolver: zodResolver(addTodoSchema),
-
-    defaultValues: {
-      todo: "",
-      dueDate: "",
-      completed: false,
-    },
-  });
-
   const navigate = useNavigate();
+  const mutation = useAddMutation();
 
-  const addTodoMutation = useAddMutation();
-
-  async function onSubmit(data: AddTodoFormValues): Promise<void> {
-    try {
-      await addTodoMutation.mutateAsync(data);
-      navigate("/tasks");
-    } catch {}
+  async function onSubmit(values: TaskFormValues): Promise<void> {
+    await mutation.mutateAsync(values);
+    navigate("/tasks");
   }
 
   return (
-    <div className="w-full">
-      <div className="mx-auto w-full max-w-5xl">
-        <Card className="w-full p-0 shadow-2xl ">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="grid grid-cols-1 items-start gap-5 p-6 md:grid-cols-2"
-          >
-            <div>
-              <label htmlFor="todo" className="mb-2 block font-medium">
-                {t("taskDescription")}
-              </label>
-              <Input
-                id="todo"
-                type="text"
-                placeholder={t("taskPlaceholder")}
-                {...register("todo")}
-                className="h-12"
-              />
-              {errors.todo?.message && (
-                <div className="pt-2">
-                  <p className="text-sm text-red-500" role="alert">
-                    {t(errors.todo?.message)}
-                  </p>
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label className="mb-2 block font-medium opacity-0 select-none" aria-hidden="true">
-                {t("taskDescription")}
-              </label>
-              <label
-                htmlFor="completed"
-                className="flex h-12 w-full cursor-pointer items-center gap-3 rounded-xl border border-border bg-muted/40 px-4"
-              >
-                <Checkbox
-                  id="completed"
-                  type="checkbox"
-                  {...register("completed")}
-                  className="cursor-pointer"
-                />
-                <span className="font-medium">{t("taskCheckbox")}</span>
-              </label>
-            </div>
-
-            <div>
-              <label htmlFor="dueDate" className="mb-2 block font-medium ">
-                {t("dueDate")}
-              </label>
-              <Controller
-                name="dueDate"
-                control={control}
-                render={({ field }) => <DatePicker id="dueDate" placeholder={t("dueDate")} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />}
-              />
-
-              {errors.dueDate?.message && (
-                <div className="pt-2">
-                  <p className="text-sm text-red-500" role="alert">
-                    {t(errors.dueDate?.message)}
-                  </p>
-                </div>
-              )}
-            </div>
-              
-            <div>
-              <label className="mb-2 block font-medium opacity-0 select-none" aria-hidden="true">
-                {t("dueDate")}
-              </label>
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="h-12 w-full"
-              >
-                {isSubmitting ? t("savingTask") : t("saveTask")}
-              </Button>
-            </div>
-          </form>
-        </Card>
-      </div>
+    <div className="mx-auto w-full max-w-3xl py-4">
+      <Card className="p-6">
+        <TaskForm
+          submitLabel={t("saveTask")}
+          submittingLabel={t("savingTask")}
+          isSubmitting={mutation.isPending}
+          onSubmit={onSubmit}
+          onCancel={() => navigate("/tasks")}
+        />
+        {mutation.isError && (
+          <p className="mt-4 text-sm text-destructive" role="alert">
+            {t("common:saveError")}
+          </p>
+        )}
+      </Card>
     </div>
   );
 }
+
 export default AddTodo;
