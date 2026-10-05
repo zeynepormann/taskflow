@@ -1,59 +1,67 @@
-import { useQuery } from "@tanstack/react-query";   //istegi ve cache yonetir
-import { getTodoById, getTodos } from "../services/todoService"; // axios ile dummyjsona istek atar
-import { useQueryClient } from "@tanstack/react-query";
-import type { TodoWithDate } from "../types/todo"; //uygulamada kullanılan görev türü
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/context/AuthContext";
+import { getTodoById, getTodos } from "@/services/todoService";
+import { getLocalDemoTask, mergeDemoTasks } from "@/features/demo/store";
+import type { TodoWithDate } from "@/types/todo";
 
-function dueDateForIndex(index: number): Date {
-    const today = new Date();
-    today.setHours(0,0,0,0);
-    const dueDate = new Date(today);
-    const dayOffSet = (index % 7) - 3;
+type TaskRouteId =
+  | { source: "local"; value: string }
+  | { source: "remote"; value: number };
 
-    dueDate.setDate(dueDate.getDate() + dayOffSet);
+function parseTaskRouteId(id: string | undefined): TaskRouteId | undefined {
+  if (!id) return undefined;
 
-    return dueDate;
+  if (id.startsWith("local-") && id.length > "local-".length) {
+    return { source: "local", value: id };
+  }
+
+  const remoteId = Number(id);
+  if (Number.isInteger(remoteId) && remoteId > 0 && String(remoteId) === id) {
+    return { source: "remote", value: remoteId };
+  }
+
+  return undefined;
 }
 
-async function fetchTodosWithDates(): Promise<TodoWithDate[]> {
-    const data = await getTodos();
-
-    return data.todos.map((todo,index) => {
-        return{
-            ...todo,
-            dueDate: dueDateForIndex(index),
-        };
-    });   
+export function isValidTaskRouteId(id: string | undefined): id is string {
+  return parseTaskRouteId(id) !== undefined;
 }
 
-async function fetchTodoWithDate(todoId: number): Promise<TodoWithDate> {
-    const todo = await getTodoById(todoId);
+export function useTodosQuery() {
+  const { user } = useAuth();
 
-    return {
-        ...todo,
-        dueDate: dueDateForIndex(todo.id - 1),
-    };
+  return useQuery({
+    queryKey: ["tasks", user?.id],
+    enabled: Boolean(user),
+    queryFn: async () => mergeDemoTasks(user!.id, (await getTodos()).todos),
+    staleTime: 60_000,
+  });
 }
 
-export function useTodosQuery(){
-    return useQuery({
-        queryKey: ["todos"],
-        queryFn: fetchTodosWithDates,
-        staleTime: 60_000,
-    });
+export function useTodoQuery(id: string | undefined) {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const taskRouteId = parseTaskRouteId(id);
+
+  return useQuery({
+    queryKey: ["task", user?.id, id],
+    enabled: Boolean(user) && taskRouteId !== undefined,
+    queryFn: async (): Promise<TodoWithDate> => {
+      if (!user || !taskRouteId) throw new Error("Invalid task route");
+      if (taskRouteId.source === "local") {
+        const task = getLocalDemoTask(user.id, taskRouteId.value);
+        if (!task) throw new Error("Task not found");
+        return task;
+      }
+      const remoteTask = await getTodoById(taskRouteId.value);
+      const task = mergeDemoTasks(user.id, [remoteTask])[0];
+      if (!task) throw new Error("Task not found");
+      return task;
+    },
+    initialData: () =>
+      queryClient
+        .getQueryData<TodoWithDate[]>(["tasks", user?.id])
+        ?.find((task) => task.id === id),
+    staleTime: 60_000,
+  });
 }
-
-export function useTodoQuery(todoId: number) {
-    const queryClient = useQueryClient();
-
-    return useQuery({
-        queryKey: ["todo", todoId],
-        queryFn: () => fetchTodoWithDate(todoId),
-        enabled: Number.isInteger(todoId) && todoId > 0,
-        initialData: () =>
-            queryClient
-                .getQueryData<TodoWithDate[]>(["todos"])
-                ?.find((todo) => todo.id === todoId),
-        staleTime: 60_000,
-    });
-}
-
