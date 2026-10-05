@@ -1,5 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useTodosQuery } from "../hooks/useTodosQuery";
 import { useDeleteMutation } from "../hooks/useDeleteMutation";
@@ -8,6 +9,8 @@ import PageLayout from "../components/page/PageLayout";
 import PageBody from "../components/page/PageBody";
 import AddTaskButton from "../components/task/AddTaskButton";
 import TaskTable from "../components/task/TaskTable";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
+import type { TodoWithDate } from "@/types/todo";
 
 function Tasks() {
   const { t } = useTranslation("tasks");
@@ -19,7 +22,7 @@ function Tasks() {
   const { data: todos = [], isPending, isError } = useTodosQuery();
 
   const deleteTodoMutation = useDeleteMutation();
-
+  const [taskToDelete, setTaskToDelete] = useState<TodoWithDate | null>(null);
   if (isPending) {
     return <p>{t("common:loading")}</p>;
   }
@@ -43,12 +46,31 @@ function Tasks() {
               todos={todos}
               columnNames={columnNames}
               onEdit={(todoId) => navigate(`/tasks/${todoId}/edit`)}
-              onDelete={(todoId) => deleteTodoMutation.mutate(todoId)}
-              isDeleting={deleteTodoMutation.isPending}
+              onDelete={setTaskToDelete}
+              deletingId={
+                deleteTodoMutation.isPending
+                  ? deleteTodoMutation.variables?.id
+                  : undefined
+              }
             />
           </Card>
         </div>
       </PageBody>
+      <ConfirmDialog
+        open={Boolean(taskToDelete)}
+        title={t("common:deleteTask")}
+        description={t("common:confirmDeleteTask")}
+        cancelLabel={t("common:cancel")}
+        confirmLabel={t("common:deleteTask")}
+        pending={deleteTodoMutation.isPending}
+        onCancel={() => setTaskToDelete(null)}
+        onConfirm={() => {
+          if (!taskToDelete) return;
+          deleteTodoMutation.mutate(taskToDelete, {
+            onSuccess: () => setTaskToDelete(null),
+          });
+        }}
+      />
     </PageLayout>
   );
 }
