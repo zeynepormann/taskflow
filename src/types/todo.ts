@@ -12,10 +12,13 @@ export interface TodoResponse  {
     todos: Todo[];
 }
 
-export interface TodoWithDate extends Todo{   //dueDate ekleyerek gecmis bugun gelecekteki todoları ayır//
+export interface TodoWithDate extends Omit<Todo, "id"> {   //dueDate ekleyerek gecmis bugun gelecekteki todoları ayır//
+    id: string;
+    remoteId?: number;
+    source: "remote" | "local";
     dueDate: Date;
-    isLocal?: boolean;
-} 
+    projectId: number;
+}
 
 export interface AddTodoRequest{
     todo: string;

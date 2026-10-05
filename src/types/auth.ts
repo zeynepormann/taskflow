@@ -1,4 +1,4 @@
-export type AuthUser = {
+export type UserProfile = {
     id: number;
     username: string;
     email: string;
@@ -6,6 +6,15 @@ export type AuthUser = {
     lastName: string;
     gender: string;
     image: string;
+};
+
+export type AuthSession = {
+    user: UserProfile;
+    accessToken: string;
+    refreshToken: string;
+};
+
+export type LoginResponse = UserProfile & {
     accessToken: string;
     refreshToken: string;
 };
