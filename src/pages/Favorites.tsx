@@ -4,7 +4,7 @@ import PageBody from "../components/page/PageBody";
 import PageHeader from "../components/page/PageHeader";
 import PageLayout from "../components/page/PageLayout";
 import ProjectCard from "../components/project/ProjectCard";
-import { useProjects } from "../context/ProjectContext";
+import { useProjects } from "../context/project-context";
 
 function Favorites() {
   const { t } = useTranslation("projects");
