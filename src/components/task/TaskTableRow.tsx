@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 
 interface TaskTableRowProps {
   todo: TodoWithDate;
-  onEdit: (todoId: number) => void;
-  onDelete: (todoId: number) => void;
+  onEdit: (todoId: string) => void;
+  onDelete: (todo: TodoWithDate) => void;
   isDeleting: boolean;
 }
 
@@ -46,7 +46,7 @@ function TaskTableRow({
           <Button
             type="button"
             aria-label={t("deleteTask")}
-            onClick={() => onDelete(todo.id)}
+            onClick={() => onDelete(todo)}
             disabled={isDeleting}
             variant="destructive"
             size="icon"
