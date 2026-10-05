@@ -6,6 +6,7 @@ interface MenuShortcutItemProps{
     description: string;
     buttonLabel: string;
     to: string;
+    onClick?: () => void;
 }
 
 function MenuShortcutItem({
@@ -13,6 +14,7 @@ function MenuShortcutItem({
     description,
     buttonLabel,
     to,
+    onClick,
 }: MenuShortcutItemProps){
     return (
       <div className="mt-6 rounded-2xl bg-primary/10 p-4 text-foreground">
@@ -27,6 +29,7 @@ function MenuShortcutItem({
 
         <NavLink
           to={to}
+          onClick={onClick}
           className="mt-4 flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-primary px-3 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary-hover"
         >
             <span>{buttonLabel}</span>
