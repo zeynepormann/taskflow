@@ -1,61 +1,37 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateUserRequest } from "../services/userService";
-import type { EditUserFormValues } from "../schema/editUserSchema";
-import type { User, userResponse } from "../types/user";
+import { useAuth } from "@/context/AuthContext";
+import { updateDemoUser } from "@/features/demo/store";
+import type { EditUserFormValues } from "@/schema/editUserSchema";
+import type { User, userResponse } from "@/types/user";
 
-interface UpdateUserVariables{
-    id: number;
-    values: EditUserFormValues;
+interface UpdateUserVariables {
+  user: User;
+  values: EditUserFormValues;
 }
 
-export function useUpdateUserMutation(){
-    const queryClient = useQueryClient();
+export function useUpdateUserMutation() {
+  const queryClient = useQueryClient();
+  const { user: actor } = useAuth();
 
-    return useMutation({
-        mutationFn: async({
-            id,
-            values,
-        }:UpdateUserVariables): Promise<User> => {
-            return updateUserRequest(id,{
-                firstName: values.firstname,
-                lastName: values.lastname,
-                username: values.username,
-                email: values.email,
-            });
-        },
-        
-        onSuccess: (updatedUser, { id, values }) => {
-            const updatedFields = {
-                ...updatedUser,
-                firstName: values.firstname,
-                lastName: values.lastname,
-                username: values.username,
-                email: values.email,
-            };
-
-            queryClient.setQueryData<User>(["user", id], (current) => ({
-                ...current,
-                ...updatedFields,
-            }));
-            queryClient.setQueriesData<userResponse>(
-                { queryKey: ["users"] },
-                (current) =>
-                    current
-                        ? {
-                              ...current,
-                              users: current.users.map((user) =>
-                                  user.id === id ? { ...user, ...updatedFields } : user,
-                              ),
-                          }
-                        : current,
-            );
-        },
-
-        onError: (error) => {
-            console.error(
-                "Kullanıcı güncellenemedi",
-                error,
-            );
-        },
-    });
+  return useMutation({
+    mutationFn: async ({ user, values }: UpdateUserVariables): Promise<User> => {
+      if (!actor) throw new Error("Authentication is required");
+      return updateDemoUser(actor.id, user, {
+        firstName: values.firstname,
+        lastName: values.lastname,
+        username: values.username,
+        email: values.email,
+      });
+    },
+    onSuccess: (updatedUser) => {
+      queryClient.setQueryData<User>(["user", actor!.id, updatedUser.id], updatedUser);
+      queryClient.setQueriesData<userResponse>(
+        { queryKey: ["users", actor!.id] },
+        (current) => current ? {
+          ...current,
+          users: current.users.map((user) => user.id === updatedUser.id ? updatedUser : user),
+        } : current,
+      );
+    },
+  });
 }
