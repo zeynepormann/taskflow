@@ -1,170 +1,58 @@
-import { useParams, useNavigate } from "react-router-dom";
-import { Controller, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  editTodoSchema,
-  type EditTodoFormValues,
-} from "../schema/editTodoSchema";
-import { useEffect } from "react";
-import { Card } from "@/components/ui/card";
+import { useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useTodoQuery } from "../hooks/useTodosQuery";
-import { useUpdateMutation } from "../hooks/useUpdateMutation";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { DatePicker } from "@/components/ui/date-picker";
+import { Card } from "@/components/ui/card";
+import { TaskForm } from "@/components/task/TaskForm";
+import { isValidTaskRouteId, useTodoQuery } from "@/hooks/useTodosQuery";
+import { useUpdateMutation } from "@/hooks/useUpdateMutation";
+import type { TaskFormValues } from "@/schema/taskSchema";
 
 function dateForInput(date: Date): string {
-  const year = date.getFullYear();
-
-  const month = String(
-    date.getMonth() + 1, //js ayları 0 dan sayar +1 ekle
-  ).padStart(2, "0"); //iki haneden kucukse basına 0 ekler-> "2" -> "02"
-
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return `${year}-${month}-${day}`; //tarihleri birlestirir 2026-07-30
+  return date.toLocaleDateString("en-CA");
 }
 
 function EditTodo() {
   const { t } = useTranslation("tasks");
-
+  const { id } = useParams();
   const navigate = useNavigate();
+  const { data: task, isPending, isError } = useTodoQuery(id);
+  const mutation = useUpdateMutation();
 
-  const { id } = useParams(); //urldeki idyi alır
+  if (!isValidTaskRouteId(id) || isError) return <p>{t("taskError")}</p>;
+  if (isPending) return <p>{t("taskUploaded")}</p>;
+  if (!task) return <p>{t("taskError")}</p>;
+  const selectedTask = task;
 
-  const todoId = Number(id); //stringi tekrardan numbera donusturur  12==="12" -> 12===12
+  const initialValues: TaskFormValues = {
+    todo: selectedTask.todo,
+    dueDate: dateForInput(selectedTask.dueDate),
+    completed: selectedTask.completed,
+    projectId: selectedTask.projectId,
+  };
 
-  const { data: selectedTodo, isPending, isError } = useTodoQuery(todoId);
-
-  const updateTodoMutation = useUpdateMutation();
-
-  const {
-    register, //inputu react hook forma baglar <input {...register("todo")} ... => spread operatoru
-    control,
-    handleSubmit, //form gonderilince zod dogrulamasını calıstırır    <form onSubmit = {handleSubmit (onSubmit)} form valid-> onSubmit(data)
-    reset, //formun butun input degerleriin sonrada degistirilmesini saglar
-    formState: { errors, isSubmitting, isDirty }, //ic ice destructuring
-  } = useForm<EditTodoFormValues>({
-    resolver: zodResolver(editTodoSchema), //from gonderildiginde verileri editTodoSchemaya gonderir
-
-    defaultValues: {
-      //formun baslangıc degerlerini doldurmak icin kullanılır güvenli baslangıc degeri diyebilirsin
-      todo: "",
-      dueDate: "",
-      completed: false,
-    },
-  });
-
-  useEffect(() => {
-    if (!selectedTodo) {
-      //ilk renderda gorev bulunamamıssa diye effect burada durur
-      return;
-    }
-    reset({
-      //reset contexteki gorevi degistirmez sadece gorev degerlerini RHF un duzenlenebilir stateine kopyalar!!
-      todo: selectedTodo.todo, //formdaki görev acıklamasını mevcut gorev acıklaması yapar
-      dueDate: dateForInput(
-        //context icindeki Date nesnesini inputun anlayacagı stringe cevirir
-        selectedTodo.dueDate,
-      ),
-      completed: selectedTodo.completed, //formdaki checkboxun baslangıc durumunu belirler
-    });
-  }, [selectedTodo, reset]); //dependency array denir effectin hangi degerleri takip ettigini soyler selectedTodo degisirse degisir,reset de yazdık cunku icinde kullanıldı
-
-  async function onSubmit(data: EditTodoFormValues): Promise<void> {
-    try {
-      await updateTodoMutation.mutateAsync({
-        id: todoId,
-        values: data,
-      });
-      navigate("/tasks");
-    } catch {}
-  }
-
-  if (isPending) {
-    return <p>{t("taskUploaded")}</p>;
-  }
-  if (isError) {
-    return <p>{t("common:loadError")}</p>;
-  }
-  if (!selectedTodo) {
-    return <p>{t("taskError")}</p>;
+  async function onSubmit(values: TaskFormValues): Promise<void> {
+    await mutation.mutateAsync({ task: selectedTask, values });
+    navigate("/tasks");
   }
 
   return (
-    <div className="w-full px-6 py-4">
-      <Card className="w-full px-4 shadow-2xl">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col  mt-6 space-y-5"
-        >
-          <div>
-            <label htmlFor="todo" className="mb-2 block font-medium">
-              {t("taskDescription")}
-            </label>
-
-            <Textarea
-              id="todo"
-              rows={4}
-              {...register("todo")}
-              className="min-h-28"
-            />
-
-            {errors.todo?.message && (
-              <p className="mt-2 text-sm text-red-500">
-                {t(errors.todo.message)}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label htmlFor="dueDate" className="mb-2 block font-medium">
-              {t("dueDate")}
-            </label>
-
-            <Controller
-              name="dueDate"
-              control={control}
-              render={({ field }) => <DatePicker id="dueDate" placeholder={t("dueDate")} value={field.value} onChange={field.onChange} onBlur={field.onBlur} />}
-            />
-
-            {errors.dueDate?.message && (
-              <p className="mt-2 text-sm text-red-500">
-                {t(errors.dueDate.message)}
-              </p>
-            )}
-          </div>
-
-          <label className="flex items-center gap-3">
-            <Checkbox
-              {...register("completed")}
-              className="h-5 w-5 accent-primary"
-            />
-
-            <span> {t("taskCheckbox")}</span>
-          </label>
-
-          <div className="flex justify-end gap-3 mb-4">
-            <Button
-              type="button"
-              onClick={() => navigate("/tasks")}
-              variant="outline"
-            >
-              {t("taskCancel")}
-            </Button>
-
-            <Button
-              type="submit"
-              disabled={!isDirty || isSubmitting}
-            >
-              {isSubmitting ? t("savingTask") : t("saveTaskChanges")}
-            </Button>
-          </div>
-        </form>
+    <div className="mx-auto w-full max-w-3xl py-4">
+      <Card className="p-6">
+        <TaskForm
+          initialValues={initialValues}
+          submitLabel={t("saveTaskChanges")}
+          submittingLabel={t("savingTask")}
+          isSubmitting={mutation.isPending}
+          onSubmit={onSubmit}
+          onCancel={() => navigate("/tasks")}
+        />
+        {mutation.isError && (
+          <p className="mt-4 text-sm text-destructive" role="alert">
+            {t("common:saveError")}
+          </p>
+        )}
       </Card>
     </div>
   );
 }
+
 export default EditTodo;
