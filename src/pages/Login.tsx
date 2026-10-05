@@ -4,8 +4,8 @@ import { EyeClosed, Eye } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/auth-context";
 import { loginSchema, type LoginFormValues } from "../schema/loginSchema";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ function Login() {
   const [visible, setVisible] = useState(false);
   const { login, loading, error } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const {
     register,
@@ -33,7 +34,10 @@ function Login() {
     });
 
     if (success) {
-      navigate("/dashboard");
+      const from =
+        (location.state as { from?: { pathname?: string } } | null)?.from
+          ?.pathname ?? "/dashboard";
+      navigate(from, { replace: true });
     }
   }
 
@@ -79,8 +83,12 @@ function Login() {
               {...register("password")}
               className="h-12 rounded-xl"
             />
-            <Button type="button" aria-label={t(visible ? "hidePassword" : "showPassword")}
-              variant="ghost" size="icon-sm" className="absolute right-2 top-2"
+            <Button
+              type="button"
+              aria-label={t(visible ? "hidePassword" : "showPassword")}
+              variant="ghost"
+              size="icon-sm"
+              className="absolute right-2 top-2"
               onClick={() => setVisible(!visible)}
             >
               {visible ? <Eye /> : <EyeClosed />}
