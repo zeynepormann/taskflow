@@ -1,13 +1,14 @@
 import api from "../api/axiosInstance"; 
 import type { LoginFormValues } from "../schema/loginSchema";
-import type { AuthUser } from "../types/auth";
+import type { AuthSession, LoginResponse } from "../types/auth";
 
 export async function LoginUser(
     credentials: LoginFormValues,
-): Promise <AuthUser> {
-    const response = await api.post<AuthUser>(
+): Promise<AuthSession> {
+    const response = await api.post<LoginResponse>(
         "/auth/login",
         credentials,
     );
-    return response.data
+    const { accessToken, refreshToken, ...user } = response.data;
+    return { user, accessToken, refreshToken };
 }
