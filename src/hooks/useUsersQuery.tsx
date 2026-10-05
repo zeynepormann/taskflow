@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { mergeDemoUsers } from "@/features/demo/store";
 import { getUser } from "@/services/userService";
 

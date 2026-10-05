@@ -1,59 +1,55 @@
-import {
-    createContext,
-    useContext,
-    useState,
-    type ReactNode,
-} from "react";
+import { useState, type ReactNode } from "react";
 
 import axios from "axios";
+import { z } from "zod";
 import { LoginUser } from "../services/authService";
+import { queryClient } from "../lib/queryClient";
 import type { LoginFormValues } from "../schema/loginSchema";
-import type {
-    AuthUser,
-    LoginErrorResponse,
-} from "../types/auth";
-
-type AuthContextValue = {
-    user: AuthUser | null;
-    token: string | null;
-    loading: boolean;
-    error: string;
-
-    login: (
-        credentials: LoginFormValues,
-    ) => Promise<boolean>;
-
-    logout: () => void;
-};
+import type { AuthSession, LoginErrorResponse } from "../types/auth";
+import { AuthContext } from "@/context/auth-context";
 
 type AuthProviderProps = {
     children: ReactNode;
 };
 
-const AuthContext = createContext<
-    AuthContextValue | undefined
->(undefined);
+const storedSessionSchema = z.object({
+    user: z.object({
+        id: z.number().int().positive(),
+        username: z.string(),
+        email: z.string().email(),
+        firstName: z.string(),
+        lastName: z.string(),
+        gender: z.string(),
+        image: z.string(),
+    }),
+    accessToken: z.string().min(1),
+    refreshToken: z.string().min(1),
+});
+
+function readStoredSession(): AuthSession | null {
+    try {
+        const raw = localStorage.getItem("authSession") ?? sessionStorage.getItem("authSession");
+        if (!raw) return null;
+        const parsed = storedSessionSchema.safeParse(JSON.parse(raw));
+        if (parsed.success) {
+            localStorage.setItem("authSession", JSON.stringify(parsed.data));
+            sessionStorage.removeItem("authSession");
+            return parsed.data;
+        }
+    } catch {
+        // Invalid storage is removed below.
+    }
+    localStorage.removeItem("authSession");
+    sessionStorage.removeItem("authSession");
+    return null;
+}
 
 export function AuthProvider({
     children,
 }: AuthProviderProps) {
-    const [user, setUser] = useState<AuthUser | null>(() => {
-        const storedUser = sessionStorage.getItem("authUser");
-
-        if(!storedUser){
-            return null;
-        }
-        try{
-            return JSON.parse(storedUser) as AuthUser;
-        } catch{
-            sessionStorage.removeItem("authUser");
-            return null;
-        }
-    });
-
-    const [token, setToken] = useState<string | null> (
-        () => sessionStorage.getItem("accessToken"),
-    );
+    const [session, setSession] = useState<AuthSession | null>(readStoredSession);
+    const user = session?.user ?? null;
+    const token = session?.accessToken ?? null;
 
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
@@ -65,25 +61,9 @@ export function AuthProvider({
         setError("");
 
         try {
-            const authenticatedUser = await LoginUser(credentials);
-
-            setUser(authenticatedUser);
-            setToken(authenticatedUser.accessToken);
-
-            sessionStorage.setItem(
-                "authUser",
-                JSON.stringify(authenticatedUser),
-            );
-
-            sessionStorage.setItem(
-                "accessToken",
-                authenticatedUser.accessToken,
-            );
-
-            sessionStorage.setItem(
-                "refreshToken",
-                authenticatedUser.refreshToken,
-            );
+            const authenticatedSession = await LoginUser(credentials);
+            setSession(authenticatedSession);
+            localStorage.setItem("authSession", JSON.stringify(authenticatedSession));
             return true;
         } catch (caughtError: unknown) {
             if( 
@@ -101,13 +81,12 @@ export function AuthProvider({
         }
     }
     function logout(): void {
-        setUser(null);
-        setToken(null);
+        void queryClient.cancelQueries();
+        queryClient.clear();
+        setSession(null);
         setError("");
 
-        sessionStorage.removeItem("authUser");
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
+        localStorage.removeItem("authSession");
        
     }
     return (
@@ -124,15 +103,4 @@ export function AuthProvider({
             { children }
         </AuthContext.Provider>
     );
-}
-
-export function useAuth(): AuthContextValue {
-    const context = useContext(AuthContext);
-
-    if (context === undefined){
-        throw new Error(
-            "useAuth, AuthProvider içinde kullanılmalıdır.",
-        );
-    }
-    return context;
 }

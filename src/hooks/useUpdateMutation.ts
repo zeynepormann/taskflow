@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { updateDemoTask } from "@/features/demo/store";
 import type { EditTodoFormValues } from "@/schema/editTodoSchema";
 import type { TodoWithDate } from "@/types/todo";

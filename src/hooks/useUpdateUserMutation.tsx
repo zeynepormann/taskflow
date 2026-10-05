@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { updateDemoUser } from "@/features/demo/store";
 import type { EditUserFormValues } from "@/schema/editUserSchema";
 import type { User, userResponse } from "@/types/user";

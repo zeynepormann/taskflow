@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { getTodoById, getTodos } from "@/services/todoService";
 import { getLocalDemoTask, mergeDemoTasks } from "@/features/demo/store";
 import type { TodoWithDate } from "@/types/todo";

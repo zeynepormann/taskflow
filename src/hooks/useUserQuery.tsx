@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/auth-context";
 import { mergeDemoUsers } from "@/features/demo/store";
 import { getUserById } from "@/services/userService";
 import type { userResponse, User } from "@/types/user";
