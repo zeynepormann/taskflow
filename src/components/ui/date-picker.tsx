@@ -1,5 +1,5 @@
 import { CalendarIcon } from "lucide-react";
-import { format, parseISO } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { enUS, tr } from "date-fns/locale";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,15 @@ interface DatePickerProps {
   placeholder: string;
   disabled?: boolean;
   className?: string;
+  "aria-invalid"?: boolean;
+  "aria-describedby"?: string;
 }
 
-function DatePicker({ id, value, onChange, onBlur, placeholder, disabled, className }: DatePickerProps) {
+function DatePicker({ id, value, onChange, onBlur, placeholder, disabled, className, ...ariaProps }: DatePickerProps) {
   const { i18n } = useTranslation();
   const locale = i18n.resolvedLanguage === "tr" ? tr : enUS;
-  const selectedDate = value ? parseISO(`${value}T12:00:00`) : undefined;
+  const parsedDate = value ? parseISO(`${value}T12:00:00`) : undefined;
+  const selectedDate = parsedDate && isValid(parsedDate) ? parsedDate : undefined;
 
   return (
     <Popover>
@@ -28,6 +31,7 @@ function DatePicker({ id, value, onChange, onBlur, placeholder, disabled, classN
         id={id}
         onBlur={onBlur}
         disabled={disabled}
+        {...ariaProps}
         render={
           <Button
             type="button"
