@@ -27,10 +27,7 @@ function ProjectDetail() {
       </PageLayout>
     );
   const tasks = todos
-    .filter(
-      (task) =>
-        task.userId % projects.length === (project.id - 1) % projects.length,
-    )
+    .filter((task) => task.projectId === project.id)
     .slice(0, 6);
   return (
     <PageLayout>
