@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { useUserQuery } from "../hooks/useUserQuery"
+import { isValidUserId } from "../hooks/useUserQuery"
 import { zodResolver } from "@hookform/resolvers/zod"
 import {useForm} from "react-hook-form"
 import { useUpdateUserMutation } from "../hooks/useUpdateUserMutation"
@@ -53,11 +54,15 @@ function EditUser(){
     async function onSubmit(data:EditUserFormValues):Promise<void> {
         try{
             await updateUserMutation.mutateAsync({
-                id: userId,
+                user: selectedUser!,
                 values: data,
             });
             navigate("/users");
-        } catch {}
+       } catch {}
+    }
+
+    if (!isValidUserId(userId)) {
+        return <p>{t("userNotFound")}</p>
     }
 
     if (isPending){
