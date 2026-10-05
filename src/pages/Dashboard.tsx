@@ -17,6 +17,8 @@ function Dashboard() {
   const { data: todos = [], isPending, error } = useTodosQuery();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   if (isPending)
     return <p className="text-sm text-muted-foreground">{t("loading")}</p>;
@@ -28,7 +30,7 @@ function Dashboard() {
     (task) => task.dueDate.toDateString() === today.toDateString(),
   );
   const upcoming = open
-    .filter((task) => task.dueDate.getTime() > today.getTime())
+    .filter((task) => task.dueDate.getTime() >= tomorrow.getTime())
     .sort((a, b) => a.dueDate.getTime() - b.dueDate.getTime());
   const overdue = open.filter(
     (task) => task.dueDate.getTime() < today.getTime(),
