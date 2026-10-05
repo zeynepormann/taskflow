@@ -4,9 +4,9 @@ import TaskTableRow from "./TaskTableRow";
 interface TaskTableProps {
   todos: TodoWithDate[];
   columnNames: string[];
-  onEdit: (todoId: number) => void;
-  onDelete: (todoId: number) => void;
-  isDeleting: boolean;
+  onEdit: (todoId: string) => void;
+  onDelete: (todo: TodoWithDate) => void;
+  deletingId?: string;
 }
 
 function TaskTable({
@@ -14,7 +14,7 @@ function TaskTable({
   columnNames,
   onEdit,
   onDelete,
-  isDeleting,
+  deletingId,
 }: TaskTableProps) {
   return (
     <div className="w-full overflow-x-auto">
@@ -40,7 +40,7 @@ function TaskTable({
               todo={todo}
               onEdit={onEdit}
               onDelete={onDelete}
-              isDeleting={isDeleting}
+              isDeleting={deletingId === todo.id}
             />
           ))}
         </tbody>
