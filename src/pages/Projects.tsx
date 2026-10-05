@@ -5,7 +5,7 @@ import PageBody from "../components/page/PageBody";
 import PageHeader from "../components/page/PageHeader";
 import PageLayout from "../components/page/PageLayout";
 
-import { useProjects } from "../context/ProjectContext";
+import { useProjects } from "../context/project-context";
 
 function Projects() {
   const { t } = useTranslation("projects");

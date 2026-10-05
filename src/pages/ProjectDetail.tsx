@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, Users } from "lucide-react";
-import { useProjects } from "../context/ProjectContext";
+import { useProjects } from "../context/project-context";
 import { useTodosQuery } from "../hooks/useTodosQuery";
 import PageLayout from "../components/page/PageLayout";
 import { Badge } from "@/components/ui/badge";
