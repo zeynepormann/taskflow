@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useTheme } from '../context/ThemeContext'
+import { useTheme } from "@/context/theme-context";
 import {Moon, Sun} from "lucide-react"
 import { Button } from "@/components/ui/button";
 

@@ -1,33 +1,22 @@
-import {
-    createContext,
-    type ReactNode,
-    useState,
-    useContext,
-    useEffect,
-} from "react";
-
-type Theme = "light" | "dark";
-
-type ThemeContextValue ={
-    theme : Theme;
-    toggleTheme: () => void;
-};
+import { type ReactNode, useEffect, useState } from "react";
+import { ThemeContext, type Theme } from "@/context/theme-context";
 
 type ThemeProviderProps = {
     children : ReactNode;
     
 };
 
-const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
-
 export function ThemeProvider({ children }: ThemeProviderProps) {
-    const [theme, setTheme] = useState<Theme>("light");
+    const [theme, setTheme] = useState<Theme>(() =>
+        localStorage.getItem("taskflow:theme") === "dark" ? "dark" : "light",
+    );
 
     useEffect(() => {
         document.documentElement.classList.toggle(
             "dark",
             theme === "dark",
         );
+        localStorage.setItem("taskflow:theme", theme);
     }, [theme]);
 
     function toggleTheme() : void {
@@ -47,12 +36,3 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     );
 }
 
-export function useTheme (): ThemeContextValue{
-    const context = useContext(ThemeContext);
-
-    if (context === undefined){
-        throw new Error ("useTheme, ThemeProvider içinde kullanılmalıdır.");
-    }
-    
-    return context;
-}
