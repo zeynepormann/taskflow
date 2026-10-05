@@ -1,23 +1,19 @@
 import { useQuery } from "@tanstack/react-query";
-import { getUser } from "../services/userService";
-import type { userResponse } from "../types/user";
-
-async function fetchUsers(
-    limit: number,
-    page: number,
-): Promise <userResponse>{
-    const data = await getUser({
-        limit,
-        page,
-    });
-
-    return data
-}
+import { useAuth } from "@/context/AuthContext";
+import { mergeDemoUsers } from "@/features/demo/store";
+import { getUser } from "@/services/userService";
 
 export function useUsersQuery(limit: number, page: number) {
+  const { user } = useAuth();
+
   return useQuery({
-    queryKey: ["users", { limit, page }],
-    queryFn: () => fetchUsers(limit, page),
+    queryKey: ["users", user?.id, { limit, page }],
+    enabled: Boolean(user),
+    queryFn: async () => {
+      const response = await getUser({ limit, page });
+      const users = mergeDemoUsers(user!.id, response.users);
+      return { ...response, users, total: response.total - (response.users.length - users.length) };
+    },
     staleTime: 60_000,
   });
 }
