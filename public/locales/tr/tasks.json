@@ -1,11 +1,18 @@
 {
     "task": "Görev",
     "dueDate": "Son Tarih",
+    "project": "Proje",
     "status": "Durum",
     "action": "İşlemler",
     "addNewTask": "Yeni Görev Ekle",
     "taskDescription": "Görev Açıklaması",
     "taskPlaceholder": "Görevinizi Yazın",
+    "searchPlaceholder": "Görev ara",
+    "searchTasks": "Görev ara",
+    "allStatuses": "Tüm durumlar",
+    "open": "Açık",
+    "dueDateAsc": "Son tarih: önce en yakın",
+    "dueDateDesc": "Son tarih: önce en uzak",
     "taskCheckbox": "Görev Tamamlandı",
     "saveTask": "Görevi Kaydet",
     "savingTask": "Görev Kaydediliyor",
@@ -15,6 +22,8 @@
     "taskUploaded": "Görev Yükleniyor",
     "validation": {
     "todoRequired": "Görev açıklaması zorunludur.",
-    "dueDateRequired": "Son tarih zorunludur."
+    "dueDateRequired": "Geçerli bir son tarih girin.",
+    "projectRequired": "Bir proje seçin.",
+    "todoTooLong": "Görev açıklaması en fazla 280 karakter olabilir."
     }   
 }

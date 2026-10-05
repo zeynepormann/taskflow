@@ -1,11 +1,18 @@
 {
   "task": "Task",
   "dueDate": "Due Date",
+  "project": "Project",
   "status": "Status",
   "action": "Action",
   "addNewTask": "Add New Task",
   "taskDescription": "Task Description",
   "taskPlaceholder": "Write Your Task",
+  "searchPlaceholder": "Search tasks",
+  "searchTasks": "Search tasks",
+  "allStatuses": "All statuses",
+  "open": "Open",
+  "dueDateAsc": "Due date: earliest first",
+  "dueDateDesc": "Due date: latest first",
   "taskCheckbox": "Task Completed",
   "saveTask": "Save Task",
   "savingTask": "Saving task…",
@@ -15,6 +22,8 @@
   "taskUploaded": "Loading task…",
   "validation": {
     "todoRequired": "Task description is required.",
-    "dueDateRequired": "Due date is required."
+    "dueDateRequired": "Enter a valid due date.",
+    "projectRequired": "Choose a project.",
+    "todoTooLong": "Task description must be 280 characters or fewer."
   }
 }

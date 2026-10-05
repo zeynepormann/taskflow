@@ -9,6 +9,11 @@
     "firstnameRequired": "First name is required.",
     "lastnameRequired": "Last name is required.",
     "usernameRequired": "Username is required.",
-    "emailRequired": "Email is required."
+    "emailRequired": "Email is required.",
+    "emailInvalid": "Enter a valid email address.",
+    "firstnameTooLong": "First name must be 80 characters or fewer.",
+    "lastnameTooLong": "Last name must be 80 characters or fewer.",
+    "usernameTooLong": "Username must be 50 characters or fewer.",
+    "emailTooLong": "Email must be 254 characters or fewer."
   }
 }

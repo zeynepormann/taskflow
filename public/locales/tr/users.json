@@ -9,6 +9,11 @@
     "firstnameRequired": "Ad zorunludur.",
     "lastnameRequired": "Soyad zorunludur.",
     "usernameRequired": "Kullanıcı adı zorunludur.",
-    "emailRequired": "E-posta zorunludur."
+    "emailRequired": "E-posta zorunludur.",
+    "emailInvalid": "Geçerli bir e-posta girin.",
+    "firstnameTooLong": "Ad en fazla 80 karakter olabilir.",
+    "lastnameTooLong": "Soyad en fazla 80 karakter olabilir.",
+    "usernameTooLong": "Kullanıcı adı en fazla 50 karakter olabilir.",
+    "emailTooLong": "E-posta en fazla 254 karakter olabilir."
   }
 }
