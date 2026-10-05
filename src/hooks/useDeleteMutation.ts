@@ -1,29 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteTodoRequest } from "../services/todoService";
-import type { TodoWithDate } from "../types/todo";
+import { useAuth } from "@/context/AuthContext";
+import { deleteDemoTask } from "@/features/demo/store";
+import type { TodoWithDate } from "@/types/todo";
 
-export function useDeleteMutation(){
-    const queryClient = useQueryClient();
+export function useDeleteMutation() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-    return useMutation({
-        mutationFn: async(
-            id: number,
-        ): Promise<void> => {
-            await deleteTodoRequest(id);
-        },
-
-        onSuccess: (_, deletedId) =>  {
-            queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) =>
-                current.filter((todo) => todo.id !== deletedId),
-            );
-            queryClient.removeQueries({ queryKey: ["todo", deletedId] });
-        },
-
-        onError: (error) => {
-            console.error(
-                "Görev Silinemedi",
-                error,
-            );
-        },
-    });
+  return useMutation({
+    mutationFn: async (task: TodoWithDate): Promise<void> => {
+      if (!user) throw new Error("Authentication is required");
+      deleteDemoTask(user.id, task);
+    },
+    onSuccess: (_, task) => {
+      queryClient.setQueryData<TodoWithDate[]>(["tasks", user!.id], (current = []) =>
+        current.filter((item) => item.id !== task.id),
+      );
+      queryClient.removeQueries({ queryKey: ["task", user!.id, task.id] });
+    },
+  });
 }

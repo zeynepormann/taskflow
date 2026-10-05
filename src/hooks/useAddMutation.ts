@@ -1,52 +1,26 @@
-import {
-    useMutation,
-    useQueryClient,
-} from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth } from "@/context/AuthContext";
+import { createDemoTask } from "@/features/demo/store";
+import type { AddTodoFormValues } from "@/schema/addTodoSchema";
+import type { TodoWithDate } from "@/types/todo";
 
-import { addTodoRequest } from "../services/todoService"
-import { useAuth } from "../context/AuthContext"
-import type { AddTodoFormValues } from "../schema/addTodoSchema"
-import type { TodoWithDate } from "../types/todo";
+export function useAddMutation() {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-export function useAddMutation(){
-    const queryClient = useQueryClient();
-    const { user } = useAuth();
-
-    return useMutation({
-        mutationFn: async (  //addtodo formdan gelen veriyi alır -> apınin kabul ettigi sekilde donusturur
-            values: AddTodoFormValues,
-        ) => {
-            if (!user){
-                throw new Error(
-                    "Görev eklemek için kullanıcı bulunamadı"
-                );
-            }
-            return addTodoRequest({
-                todo: values.todo,
-                completed: values.completed,
-                userId: user.id,
-            });
-        },
-
-        onSuccess: (createdTodo, values) => {
-            const todoWithDate = {
-                ...createdTodo,
-                dueDate: new Date(`${values.dueDate}T12:00:00`),
-                isLocal: true,
-            };
-
-            queryClient.setQueryData<TodoWithDate[]>(["todos"], (current = []) => [
-                ...current,
-                todoWithDate,
-            ]);
-            queryClient.setQueryData<TodoWithDate>(["todo", createdTodo.id], todoWithDate);
-        },
-
-        onError: (error) => {
-            console.error(
-                "Görev Eklenemedi",
-                error,
-            );
-        },
-    });
+  return useMutation({
+    mutationFn: async (values: AddTodoFormValues): Promise<TodoWithDate> => {
+      if (!user) throw new Error("Authentication is required");
+      return createDemoTask(user.id, {
+        todo: values.todo,
+        completed: values.completed,
+        dueDate: new Date(`${values.dueDate}T12:00:00`),
+        projectId: values.projectId,
+      });
+    },
+    onSuccess: (task) => {
+      queryClient.setQueryData<TodoWithDate[]>(["tasks", user!.id], (current = []) => [...current, task]);
+      queryClient.setQueryData<TodoWithDate>(["task", user!.id, task.id], task);
+    },
+  });
 }
