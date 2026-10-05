@@ -6,7 +6,7 @@ void i18n
     .use(HttpBackend)
     .use(initReactI18next)
     .init({
-        lng: "en",
+        lng: localStorage.getItem("taskflow:language") === "tr" ? "tr" : "en",
 
         fallbackLng: "en",
 
@@ -37,7 +37,8 @@ void i18n
     })
 i18n.on("languageChanged", (language) => {
     document.documentElement.lang = language;
+    localStorage.setItem("taskflow:language", language);
 });
-document.documentElement.lang = "en";
+document.documentElement.lang = i18n.language;
 
 export default i18n
