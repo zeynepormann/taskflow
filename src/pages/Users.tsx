@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDeleteUserRequest } from "../hooks/useDeleteUserMutation";
 import { Button } from "@/components/ui/button";
 import { Pagination, PaginationContent, PaginationItem } from "@/components/ui/pagination";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 
 function Users(){
     const [page, setPage] = useState(1 )
@@ -30,6 +31,7 @@ function Users(){
     const navigate = useNavigate();
 
     const deleteUserMutation = useDeleteUserRequest();
+    const [userIdToDelete, setUserIdToDelete] = useState<number | null>(null);
     
     const { t } = useTranslation("users");
     const columnNames = [t("id"), t("firstname"), t("lastname"), t("username"), t("email"), t("action")];
@@ -56,7 +58,7 @@ function Users(){
                     users={users}
                     columnNames={columnNames}
                     onEdit={(userId) => navigate(`/users/${userId}/edit`)}
-                    onDelete={(userId) => deleteUserMutation.mutate(userId)}
+                    onDelete={setUserIdToDelete}
                     isDeleting={deleteUserMutation.isPending}
                   />
                   <Pagination className="mb-4 justify-end px-6">
@@ -95,6 +97,19 @@ function Users(){
             </div>
           </Card>
         </PageBody>
+        <ConfirmDialog
+          open={userIdToDelete !== null}
+          title={t("common:deleteUser")}
+          description={t("common:confirmDeleteUser")}
+          cancelLabel={t("common:cancel")}
+          confirmLabel={t("common:deleteUser")}
+          pending={deleteUserMutation.isPending}
+          onCancel={() => setUserIdToDelete(null)}
+          onConfirm={() => {
+            if (userIdToDelete === null) return;
+            deleteUserMutation.mutate(userIdToDelete, { onSuccess: () => setUserIdToDelete(null) });
+          }}
+        />
       </PageLayout>
     );}
 export default Users
