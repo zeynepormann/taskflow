@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslation } from "react-i18next";
-import { useProjects } from "@/context/ProjectContext";
+import { useProjects } from "@/context/project-context";
 import { taskSchema, type TaskFormValues } from "@/schema/taskSchema";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
