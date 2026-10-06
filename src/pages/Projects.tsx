@@ -4,13 +4,11 @@ import ProjectCard from "../components/project/ProjectCard";
 import PageBody from "../components/page/PageBody";
 import PageHeader from "../components/page/PageHeader";
 import PageLayout from "../components/page/PageLayout";
-
-import { useProjects } from "../context/project-context";
+import { useProjectSummaries } from "@/hooks/useProjectSummaries";
 
 function Projects() {
   const { t } = useTranslation("projects");
-
-  const { projects, toggleFavorite } = useProjects();
+  const { projects, toggleFavorite } = useProjectSummaries();
 
   return (
     <PageLayout>

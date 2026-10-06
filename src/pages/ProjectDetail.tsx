@@ -1,21 +1,19 @@
 import { useTranslation } from "react-i18next";
-
 import { Link, useParams } from "react-router-dom";
 import { ArrowLeft, CheckCircle2, Users } from "lucide-react";
-import { useProjects } from "../context/project-context";
-import { useTodosQuery } from "../hooks/useTodosQuery";
 import PageLayout from "../components/page/PageLayout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { useProjectSummaries } from "@/hooks/useProjectSummaries";
 
 function ProjectDetail() {
   const { t, i18n } = useTranslation("common");
   const { id } = useParams();
-  const { projects, toggleFavorite } = useProjects();
-  const { data: todos = [] } = useTodosQuery();
+  const { projects, tasks, toggleFavorite } = useProjectSummaries();
   const project = projects.find((item) => item.id === Number(id));
-  if (!project)
+
+  if (!project) {
     return (
       <PageLayout>
         <Link to="/projects" className="text-sm font-semibold text-primary">
@@ -26,9 +24,12 @@ function ProjectDetail() {
         </p>
       </PageLayout>
     );
-  const tasks = todos
+  }
+
+  const projectTasks = tasks
     .filter((task) => task.projectId === project.id)
     .slice(0, 6);
+
   return (
     <PageLayout>
       <Link
@@ -89,7 +90,7 @@ function ProjectDetail() {
       <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
         <h2 className="font-semibold">{t("common:linkedTasks")}</h2>
         <div className="mt-3 divide-y divide-border">
-          {tasks.map((task) => (
+          {projectTasks.map((task) => (
             <Link
               key={task.id}
               to={`/tasks/${task.id}/edit`}
@@ -111,4 +112,5 @@ function ProjectDetail() {
     </PageLayout>
   );
 }
+
 export default ProjectDetail;

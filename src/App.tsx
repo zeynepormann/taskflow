@@ -1,6 +1,7 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import AuthLayout from "./layouts/AuthLayout";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import ProjectRouteProvider from "./routes/ProjectRouteProvider";
 import MainLayout from "./layouts/MainLayout";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
@@ -29,17 +30,20 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/tasks" element={<Tasks />} />
-          <Route path="/tasks/new" element={<AddTodo />} />
-          <Route path="/tasks/:id/edit" element={<EditTodo />} />
           <Route path="/tasks/:id" element={<TaskDetail />} />
           <Route path="/calendar" element={<Calendar />} />
           <Route path="/feed" element={<Feed />} />
-          <Route path="/favorites" element={<Favorites />} />
           <Route path="/notifications" element={<Notifications />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:id" element={<ProjectDetail />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id/edit" element={<EditUser />} />
+
+          <Route element={<ProjectRouteProvider />}>
+            <Route path="/tasks/new" element={<AddTodo />} />
+            <Route path="/tasks/:id/edit" element={<EditTodo />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:id" element={<ProjectDetail />} />
+          </Route>
         </Route>
       </Route>
 

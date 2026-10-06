@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/context/auth-context";
-import { getTodoById, getTodos } from "@/services/todoService";
+import { getTodoById, getTodosForUser } from "@/services/todoService";
 import { getLocalDemoTask, mergeDemoTasks } from "@/features/demo/store";
 import type { TodoWithDate } from "@/types/todo";
 
@@ -33,7 +33,8 @@ export function useTodosQuery() {
   return useQuery({
     queryKey: ["tasks", user?.id],
     enabled: Boolean(user),
-    queryFn: async () => mergeDemoTasks(user!.id, (await getTodos()).todos),
+    queryFn: async () =>
+      mergeDemoTasks(user!.id, (await getTodosForUser(user!.id)).todos),
     staleTime: 60_000,
   });
 }
@@ -48,12 +49,18 @@ export function useTodoQuery(id: string | undefined) {
     enabled: Boolean(user) && taskRouteId !== undefined,
     queryFn: async (): Promise<TodoWithDate> => {
       if (!user || !taskRouteId) throw new Error("Invalid task route");
+
       if (taskRouteId.source === "local") {
         const task = getLocalDemoTask(user.id, taskRouteId.value);
         if (!task) throw new Error("Task not found");
         return task;
       }
+
       const remoteTask = await getTodoById(taskRouteId.value);
+      if (remoteTask.userId !== user.id) {
+        throw new Error("Task not found");
+      }
+
       const task = mergeDemoTasks(user.id, [remoteTask])[0];
       if (!task) throw new Error("Task not found");
       return task;
