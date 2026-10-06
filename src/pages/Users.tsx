@@ -17,16 +17,18 @@ function Users(){
     const [page, setPage] = useState(1 )
     const limit = 10;
 
-    const { data: userResponse, isPending, isError, refetch } = useUsersQuery(limit, page);
+    const { data: userResponse, isPending, isError, isFetching, refetch } = useUsersQuery(limit, page);
 
     const users = userResponse?.users ?? [];
     const total = userResponse?.total ?? 0;
 
-    const totalPage = Math.max(1, Math.ceil(total / limit));
+    const totalPage = userResponse ? Math.max(1, Math.ceil(total / limit)) : null;
 
     useEffect(() => {
-      setPage((currentPage) => Math.min(currentPage, totalPage));
-    }, [totalPage]);
+      if (totalPage !== null && page > totalPage) {
+        setPage(totalPage);
+      }
+    }, [page, totalPage]);
 
     const navigate = useNavigate();
 
@@ -67,7 +69,7 @@ function Users(){
                         <Button
                           type="button"
                           aria-label={t("common:previousPage")}
-                          disabled={page === 1}
+                          disabled={page === 1 || isFetching}
                           onClick={() => setPage((previousPage) => previousPage - 1)}
                           variant="outline"
                           size="icon"
@@ -76,13 +78,13 @@ function Users(){
                         </Button>
                       </PaginationItem>
                       <PaginationItem className="min-w-12 text-center text-sm font-semibold" aria-live="polite">
-                        {page}/{totalPage}
+                        {page}/{totalPage ?? "…"}
                       </PaginationItem>
                       <PaginationItem>
                         <Button
                           type="button"
                           aria-label={t("common:nextPage")}
-                          disabled={page >= totalPage}
+                          disabled={isFetching || totalPage === null || page >= totalPage}
                           onClick={() => setPage((previousPage) => previousPage + 1)}
                           variant="outline"
                           size="icon"
